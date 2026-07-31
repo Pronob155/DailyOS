@@ -1,0 +1,67 @@
+body {
+
+    font-family: "Inter", sans-serif;
+
+    background: var(--bg);
+
+    color: var(--text);
+}
+
+.app {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    height: 100vh;
+
+    padding: 20px;
+}
+
+.welcome {
+
+    text-align: center;
+
+    background: var(--surface);
+
+    padding: 60px;
+
+    border-radius: var(--border-radius);
+
+    box-shadow: var(--shadow);
+
+    animation: fadeIn .8s ease;
+}
+
+.welcome h1 {
+
+    font-size: 3rem;
+
+    margin-bottom: 10px;
+}
+
+.welcome p {
+
+    color: var(--text-light);
+
+    font-size: 1.1rem;
+}
+
+@keyframes fadeIn {
+
+    from {
+
+        opacity: 0;
+
+        transform: translateY(20px);
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: translateY(0);
+    }
+}
