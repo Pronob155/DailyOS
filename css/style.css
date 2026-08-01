@@ -1,67 +1,128 @@
 body {
-
     font-family: "Inter", sans-serif;
-
     background: var(--bg);
-
     color: var(--text);
 }
 
-.app {
+/* ==========================
+   Layout
+========================== */
+
+.layout {
+    display: grid;
+    grid-template-columns: var(--sidebar-width) 1fr;
+    min-height: 100vh;
+}
+
+/* ==========================
+   Sidebar
+========================== */
+
+.sidebar {
+    background: var(--surface);
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 40px;
+}
+
+.logo i {
+    color: var(--primary);
+}
+
+.sidebar-placeholder {
+    color: var(--text-light);
+    font-size: 0.95rem;
+}
+
+/* ==========================
+   Main
+========================== */
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+}
+
+/* ==========================
+   Header
+========================== */
+
+.header {
+    height: 80px;
+    padding: 0 30px;
+    background: var(--surface);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
+.page-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.header-right input {
+    width: 220px;
+    padding: 10px 14px;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    background: var(--surface-light);
+    color: var(--text);
+}
+
+.avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--primary);
+
+    display: flex;
+    align-items: center;
     justify-content: center;
 
-    align-items: center;
-
-    height: 100vh;
-
-    padding: 20px;
+    font-size: 1rem;
 }
 
-.welcome {
+/* ==========================
+   Dashboard
+========================== */
 
-    text-align: center;
+.dashboard {
+    flex: 1;
+    padding: 40px;
+}
 
+.hero {
     background: var(--surface);
-
-    padding: 60px;
-
     border-radius: var(--border-radius);
-
+    padding: 40px;
     box-shadow: var(--shadow);
-
-    animation: fadeIn .8s ease;
 }
 
-.welcome h1 {
-
-    font-size: 3rem;
-
+.hero h1 {
+    font-size: 2rem;
     margin-bottom: 10px;
 }
 
-.welcome p {
-
+.hero p {
     color: var(--text-light);
-
-    font-size: 1.1rem;
-}
-
-@keyframes fadeIn {
-
-    from {
-
-        opacity: 0;
-
-        transform: translateY(20px);
-    }
-
-    to {
-
-        opacity: 1;
-
-        transform: translateY(0);
-    }
 }
