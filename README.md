@@ -29,7 +29,7 @@ Organize your daily tasks, plan your schedule, track your progress, and stay pro
 
 **DailyOS** is a personal productivity dashboard that helps you organize your daily life in one place.
 
-Whether you're managing daily tasks, planning your study sessions, tracking goals, taking notes, or staying focused with a Pomodoro timer, DailyOS provides a clean and organized workspace to boost your productivity.
+Whether you're managing daily tasks, planning your study sessions, tracking goals, taking notes, or staying focused, DailyOS provides a clean and organized workspace to boost your productivity.
 
 ---
 
