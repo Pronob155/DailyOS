@@ -22,6 +22,7 @@ body {
     background: var(--surface);
     border-right: 1px solid rgba(255, 255, 255, 0.08);
     padding: 24px;
+
     display: flex;
     flex-direction: column;
 }
@@ -30,18 +31,59 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
+
     font-size: 1.4rem;
     font-weight: 700;
-    margin-bottom: 40px;
+
+    margin-bottom: 36px;
 }
 
 .logo i {
     color: var(--primary);
+    font-size: 1.6rem;
 }
 
-.sidebar-placeholder {
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    flex: 1;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    padding: 14px 16px;
+
+    border-radius: 12px;
+
     color: var(--text-light);
-    font-size: 0.95rem;
+
+    transition: var(--transition);
+}
+
+.nav-item i {
+    width: 22px;
+    text-align: center;
+}
+
+.nav-item:hover {
+    background: var(--surface-light);
+    color: var(--text);
+}
+
+.nav-item.active {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 8px 20px rgba(99, 102, 241, .35);
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    padding-top: 20px;
 }
 
 /* ==========================
