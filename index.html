@@ -134,20 +134,195 @@
 
             </header>
 
-            <!-- Dashboard -->
             <main class="dashboard">
 
-                <section class="hero">
+    <!-- Dashboard Welcome -->
+    <section class="hero">
 
-                    <h1>Welcome Back 👋</h1>
+        <div class="hero-content">
 
-                    <p>
-                        Your productivity dashboard is ready.
-                    </p>
+            <p class="hero-label">TODAY</p>
 
-                </section>
+            <h1>Welcome Back 👋</h1>
 
-            </main>
+            <p class="hero-description">
+                Here's your productivity overview for today.
+            </p>
+
+        </div>
+
+        <div class="hero-date">
+
+            <i class="fa-regular fa-calendar"></i>
+
+            <span>Monday, August 10</span>
+
+        </div>
+
+    </section>
+
+
+    <!-- Summary Cards -->
+    <section class="dashboard-cards">
+
+        <!-- Tasks Card -->
+        <article class="dashboard-card">
+
+            <div class="card-header">
+
+                <div class="card-icon">
+                    <i class="fa-solid fa-list-check"></i>
+                </div>
+
+                <span class="card-label">
+                    Today's Tasks
+                </span>
+
+            </div>
+
+            <div class="card-value">
+                8
+            </div>
+
+            <p class="card-description">
+                tasks planned for today
+            </p>
+
+        </article>
+
+
+        <!-- Completed Card -->
+        <article class="dashboard-card">
+
+            <div class="card-header">
+
+                <div class="card-icon success">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+
+                <span class="card-label">
+                    Completed
+                </span>
+
+            </div>
+
+            <div class="card-value">
+                5
+            </div>
+
+            <p class="card-description">
+                tasks completed today
+            </p>
+
+        </article>
+
+
+        <!-- Study Time Card -->
+        <article class="dashboard-card">
+
+            <div class="card-header">
+
+                <div class="card-icon warning">
+                    <i class="fa-solid fa-book-open"></i>
+                </div>
+
+                <span class="card-label">
+                    Study Time
+                </span>
+
+            </div>
+
+            <div class="card-value">
+                2h 30m
+            </div>
+
+            <p class="card-description">
+                focused time today
+            </p>
+
+        </article>
+
+    </section>
+
+
+    <!-- Secondary Cards -->
+    <section class="dashboard-secondary">
+
+        <!-- Goal Card -->
+        <article class="dashboard-card goal-card">
+
+            <div class="card-header">
+
+                <div class="card-icon">
+                    <i class="fa-solid fa-bullseye"></i>
+                </div>
+
+                <span class="card-label">
+                    Current Goal
+                </span>
+
+            </div>
+
+            <h2>
+                Complete Portfolio
+            </h2>
+
+            <div class="progress-container">
+
+                <div class="progress-info">
+
+                    <span>Progress</span>
+
+                    <span>75%</span>
+
+                </div>
+
+                <div class="progress-bar">
+
+                    <div
+                        class="progress-fill"
+                        style="width: 75%;">
+                    </div>
+
+                </div>
+
+            </div>
+
+        </article>
+
+
+        <!-- Productivity Card -->
+        <article class="dashboard-card productivity-card">
+
+            <div class="card-header">
+
+                <div class="card-icon">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+
+                <span class="card-label">
+                    Productivity
+                </span>
+
+            </div>
+
+            <div class="productivity-score">
+
+                <span class="score">
+                    78%
+                </span>
+
+                <span class="score-label">
+                    This Week
+                </span>
+
+            </div>
+
+        </article>
+
+    </section>
+
+</main>
 
         </div>
 
