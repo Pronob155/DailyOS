@@ -62,3 +62,7 @@ function loadTasks() {
         return [];
     }
 }
+export {
+    saveTasks,
+    loadTasks
+};
