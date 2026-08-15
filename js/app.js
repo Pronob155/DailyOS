@@ -1,5 +1,8 @@
 "use strict";
-
+import {
+    saveTasks,
+    loadTasks
+} from "./storage.js";
 /*
 =========================================
 DailyOS
