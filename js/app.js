@@ -73,5 +73,6 @@ function initializeApp() {
 document.addEventListener("DOMContentLoaded", () => {
 
     console.log("DailyOS Initialized.");
-
+    
+    initializeApp();
 });
