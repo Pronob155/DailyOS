@@ -45,6 +45,30 @@ const defaultTasks = [
     }
 ];
 
+/* ==========================
+   Application Initialization
+========================== */
+
+function initializeApp() {
+
+    const existingTasks = loadTasks();
+
+    if (existingTasks.length === 0) {
+
+        saveTasks(defaultTasks);
+
+        console.log(
+            "Default tasks saved to Local Storage."
+        );
+
+    } else {
+
+        console.log(
+            "Tasks loaded from Local Storage."
+        );
+
+    }
+}
 
 document.addEventListener("DOMContentLoaded", () => {
 
