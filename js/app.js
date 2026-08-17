@@ -69,7 +69,33 @@ function initializeApp() {
 
     }
 }
+/* ==========================
+   Task Completion
+========================== */
 
+/**
+ * Toggles the completion status of a task.
+ *
+ * @param {number} taskId - The ID of the selected task
+ */
+function toggleTaskCompletion(taskId) {
+
+    const tasks = loadTasks();
+
+    const task = tasks.find(
+        task => task.id === taskId
+    );
+
+    if (!task) {
+        return;
+    }
+
+    task.completed = !task.completed;
+
+    saveTasks(tasks);
+
+    updateTaskUI(task);
+}
 document.addEventListener("DOMContentLoaded", () => {
 
     console.log("DailyOS Initialized.");
