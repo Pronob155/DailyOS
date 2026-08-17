@@ -96,6 +96,38 @@ function toggleTaskCompletion(taskId) {
 
     updateTaskUI(task);
 }
+/**
+ * Updates the visual state of a task.
+ *
+ * @param {Object} task - Task object
+ */
+function updateTaskUI(task) {
+
+    const taskElement = document.querySelector(
+        `[data-task-id="${task.id}"]`
+    );
+
+    if (!taskElement) {
+        return;
+    }
+
+    const checkbox = taskElement.querySelector(
+        ".task-checkbox"
+    );
+
+    if (task.completed) {
+
+        taskElement.classList.add("completed");
+
+        checkbox.classList.add("checked");
+
+    } else {
+
+        taskElement.classList.remove("completed");
+
+        checkbox.classList.remove("checked");
+    }
+}
 document.addEventListener("DOMContentLoaded", () => {
 
     console.log("DailyOS Initialized.");
