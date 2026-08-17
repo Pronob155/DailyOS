@@ -162,6 +162,9 @@ function initializeTaskEvents() {
 document.addEventListener("DOMContentLoaded", () => {
 
     console.log("DailyOS Initialized.");
-    
+
     initializeApp();
+
+    initializeTaskEvents();
+
 });
