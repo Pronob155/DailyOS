@@ -128,6 +128,37 @@ function updateTaskUI(task) {
         checkbox.classList.remove("checked");
     }
 }
+/* ==========================
+   Task Event Listeners
+========================== */
+
+function initializeTaskEvents() {
+
+    const taskCheckboxes = document.querySelectorAll(
+        ".task-checkbox"
+    );
+
+    taskCheckboxes.forEach(checkbox => {
+
+        checkbox.addEventListener("click", () => {
+
+            const taskElement =
+                checkbox.closest(".task-item");
+
+            if (!taskElement) {
+                return;
+            }
+
+            const taskId = Number(
+                taskElement.dataset.taskId
+            );
+
+            toggleTaskCompletion(taskId);
+
+        });
+
+    });
+}
 document.addEventListener("DOMContentLoaded", () => {
 
     console.log("DailyOS Initialized.");
