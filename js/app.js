@@ -159,6 +159,20 @@ function initializeTaskEvents() {
 
     });
 }
+/* ==========================
+   Sync Task UI
+========================== */
+
+function syncTaskUI() {
+
+    const tasks = loadTasks();
+
+    tasks.forEach(task => {
+
+        updateTaskUI(task);
+
+    });
+}
 document.addEventListener("DOMContentLoaded", () => {
 
     console.log("DailyOS Initialized.");
@@ -166,5 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initializeApp();
 
     initializeTaskEvents();
+
+    syncTaskUI();
 
 });
