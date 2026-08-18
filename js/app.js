@@ -95,6 +95,8 @@ function toggleTaskCompletion(taskId) {
     saveTasks(tasks);
 
     updateTaskUI(task);
+
+    updateDashboardStats();
 }
 /**
  * Updates the visual state of a task.
@@ -173,6 +175,42 @@ function syncTaskUI() {
 
     });
 }
+/* ==========================
+   Dashboard Statistics
+========================== */
+
+/**
+ * Updates dashboard task statistics.
+ */
+function updateDashboardStats() {
+
+    const tasks = loadTasks();
+
+    const totalTasks = tasks.length;
+
+    const completedTasks = tasks.filter(
+        task => task.completed
+    ).length;
+
+    const totalTasksElement =
+        document.getElementById("total-tasks");
+
+    const completedTasksElement =
+        document.getElementById("completed-tasks");
+
+    if (totalTasksElement) {
+
+        totalTasksElement.textContent = totalTasks;
+
+    }
+
+    if (completedTasksElement) {
+
+        completedTasksElement.textContent =
+            completedTasks;
+
+    }
+}
 document.addEventListener("DOMContentLoaded", () => {
 
     console.log("DailyOS Initialized.");
@@ -182,5 +220,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initializeTaskEvents();
 
     syncTaskUI();
+
+    updateDashboardStats();
 
 });
