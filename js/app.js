@@ -300,7 +300,6 @@ function applyTaskFilters() {
 /* ==========================
    Dashboard Statistics
 ========================== */
-
 /**
  * Updates dashboard task statistics.
  */
