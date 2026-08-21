@@ -311,9 +311,9 @@
                 <section class="task-section">
 
                     <!-- Task Header -->
-                    <div class="section-header">
+                    <div class="task-header">
 
-                        <div>
+                        <div class="task-header-content">
 
                             <p class="section-label">
                                 PRODUCTIVITY
@@ -329,9 +329,40 @@
 
                         </div>
 
-                        <span class="task-count">
-                            3 tasks
-                        </span>
+                        <div class="task-actions">
+
+                            <div class="task-search">
+
+                                <i class="fa-solid fa-magnifying-glass"></i>
+
+                                <input type="search" id="task-search" placeholder="Search tasks..." autocomplete="off">
+
+                            </div>
+                            <div class="task-filter">
+
+                                <select id="task-filter" aria-label="Filter tasks">
+
+                                    <option value="all">
+                                        All
+                                    </option>
+
+                                    <option value="active">
+                                        Active
+                                    </option>
+
+                                    <option value="completed">
+                                        Completed
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            <span class="task-count">
+                                3 tasks
+                            </span>
+
+                        </div>
 
                     </div>
 
@@ -374,7 +405,7 @@
 
                                 <div class="task-info">
 
-                                    <h3>
+                                    <h3 class="task-title">
                                         Complete portfolio project
                                     </h3>
 
@@ -417,7 +448,7 @@
 
                                 <div class="task-info">
 
-                                    <h3>
+                                    <h3 class="task-title">
                                         Study Data Structures
                                     </h3>
 
@@ -460,7 +491,7 @@
 
                                 <div class="task-info">
 
-                                    <h3>
+                                    <h3 class="task-title">
                                         Work on DailyOS
                                     </h3>
 
@@ -488,6 +519,7 @@
                             </div>
 
                         </article>
+                        
 
                     </div>
 
