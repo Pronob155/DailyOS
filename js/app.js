@@ -160,6 +160,36 @@ function initializeTaskEvents() {
         });
 
     });
+    const searchInput =
+        document.getElementById("task-search");
+
+    if (searchInput) {
+
+        searchInput.addEventListener(
+            "input",
+            () => {
+
+                applyTaskFilters();
+
+            }
+        );
+
+    }
+    const taskFilter =
+        document.getElementById("task-filter");
+
+    if (taskFilter) {
+
+        taskFilter.addEventListener(
+            "change",
+            () => {
+
+                applyTaskFilters();
+
+            }
+        );
+
+    }
 }
 /* ==========================
    Sync Task UI
@@ -174,6 +204,98 @@ function syncTaskUI() {
         updateTaskUI(task);
 
     });
+}
+/* ==========================
+   Search & Filter
+========================== */
+
+/**
+ * Applies both search and status filters
+ * to the task list.
+ */
+function applyTaskFilters() {
+
+    const emptyState =
+        document.getElementById("task-empty-state");
+
+    let visibleTaskCount = 0;
+
+    const searchInput =
+        document.getElementById("task-search");
+
+    const taskFilter =
+        document.getElementById("task-filter");
+
+    const searchQuery = searchInput
+        ? searchInput.value.trim().toLowerCase()
+        : "";
+
+    const filterValue = taskFilter
+        ? taskFilter.value
+        : "all";
+
+    const tasks = loadTasks();
+
+    const taskItems = document.querySelectorAll(
+        ".task-item"
+    );
+
+    taskItems.forEach(taskItem => {
+
+        const taskId = Number(
+            taskItem.dataset.taskId
+        );
+
+        const task = tasks.find(
+            task => task.id === taskId
+        );
+
+        if (!task) {
+            return;
+        }
+
+        const taskTitleElement =
+            taskItem.querySelector(".task-title");
+
+        const taskTitle = taskTitleElement
+            ? taskTitleElement.textContent
+                .trim()
+                .toLowerCase()
+            : "";
+
+        const matchesSearch =
+            taskTitle.includes(searchQuery);
+
+        let matchesFilter = true;
+
+        if (filterValue === "active") {
+
+            matchesFilter = !task.completed;
+
+        } else if (filterValue === "completed") {
+
+            matchesFilter = task.completed;
+
+        }
+
+        const shouldShow =
+            matchesSearch && matchesFilter;
+
+        taskItem.style.display =
+            shouldShow ? "" : "none";
+
+        if (shouldShow) {
+            visibleTaskCount++;
+        }
+
+    });
+    if (emptyState) {
+
+        emptyState.hidden =
+            visibleTaskCount !== 0;
+
+    }
+
 }
 /* ==========================
    Dashboard Statistics
@@ -211,16 +333,4 @@ function updateDashboardStats() {
 
     }
 }
-document.addEventListener("DOMContentLoaded", () => {
 
-    console.log("DailyOS Initialized.");
-
-    initializeApp();
-
-    initializeTaskEvents();
-
-    syncTaskUI();
-
-    updateDashboardStats();
-
-});
