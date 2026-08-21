@@ -333,4 +333,16 @@ function updateDashboardStats() {
 
     }
 }
+document.addEventListener("DOMContentLoaded", () => {
 
+    console.log("DailyOS Initialized.");
+
+    initializeApp();
+
+    initializeTaskEvents();
+
+    syncTaskUI();
+
+    updateDashboardStats();
+
+});
