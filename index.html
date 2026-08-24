@@ -525,7 +525,132 @@
 
                             <h3>No tasks found</h3>
 
-                        
+
+
+                        </div>
+
+                    </div>
+
+                </section>
+                <!-- Daily Planner -->
+                <section class="planner-section">
+
+                    <div class="planner-header">
+
+                        <div class="planner-header-content">
+
+                            <p class="section-label">
+                                PLANNING
+                            </p>
+
+                            <h2>
+                                Daily Planner
+                            </h2>
+
+                            <p class="section-description">
+                                Plan your day and stay organized.
+                            </p>
+
+                        </div>
+
+                        <button type="button" class="planner-add-button" id="add-plan-button">
+
+                            <i class="fa-solid fa-plus"></i>
+
+                            Add Plan
+
+                        </button>
+
+                    </div>
+                    <!-- Planner Timeline -->
+
+                    <div class="planner-list" id="planner-list">
+                    </div>
+                    <!-- Add Plan Modal -->
+                    <div class="planner-modal" id="planner-modal" hidden>
+
+                        <div class="planner-modal-overlay"></div>
+
+                        <div class="planner-modal-content" role="dialog" aria-modal="true"
+                            aria-labelledby="planner-modal-title">
+
+                            <div class="planner-modal-header">
+
+                                <div>
+                                    <p class="section-label">
+                                        PLANNING
+                                    </p>
+
+                                    <h2 id="planner-modal-title">
+                                        Add Daily Plan
+                                    </h2>
+                                </div>
+
+                                <button type="button" class="planner-modal-close" id="planner-modal-close"
+                                    aria-label="Close">
+
+                                    <i class="fa-solid fa-xmark"></i>
+
+                                </button>
+
+                            </div>
+
+
+                            <form id="planner-form">
+
+                                <div class="form-group">
+
+                                    <label for="plan-time">
+                                        Time
+                                    </label>
+
+                                    <input type="time" id="plan-time" required>
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label for="plan-title">
+                                        Plan Title
+                                    </label>
+
+                                    <input type="text" id="plan-title" placeholder="e.g. Java Practice" required>
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label for="plan-description">
+                                        Description
+                                    </label>
+
+                                    <textarea id="plan-description" rows="3"
+                                        placeholder="What do you want to work on?"></textarea>
+
+                                </div>
+
+
+                                <div class="planner-form-actions">
+
+                                    <button type="button" class="planner-cancel-button" id="planner-cancel-button">
+
+                                        Cancel
+
+                                    </button>
+
+                                    <button type="submit" class="planner-save-button">
+
+                                        <i class="fa-solid fa-plus"></i>
+
+                                        Add Plan
+
+                                    </button>
+
+                                </div>
+
+                            </form>
 
                         </div>
 
