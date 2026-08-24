@@ -192,6 +192,284 @@ function initializeTaskEvents() {
     }
 }
 /* ==========================
+   Planner Local Storage
+========================== */
+
+const PLANNER_STORAGE_KEY = "dailyos_plans";
+
+
+function loadPlannerItems() {
+
+    const storedPlans =
+        localStorage.getItem(
+            PLANNER_STORAGE_KEY
+        );
+
+    if (!storedPlans) {
+        return [];
+    }
+
+    try {
+
+        return JSON.parse(storedPlans);
+
+    } catch (error) {
+
+        console.error(
+            "Failed to load planner data:",
+            error
+        );
+
+        return [];
+
+    }
+}
+
+
+function savePlannerItems(plans) {
+
+    localStorage.setItem(
+        PLANNER_STORAGE_KEY,
+        JSON.stringify(plans)
+    );
+
+}
+/* ==========================
+   Daily Planner
+========================== */
+
+function initializePlanner() {
+
+    const addPlanButton =
+        document.getElementById("add-plan-button");
+
+    const plannerModal =
+        document.getElementById("planner-modal");
+
+    const closeButton =
+        document.getElementById("planner-modal-close");
+
+    const cancelButton =
+        document.getElementById("planner-cancel-button");
+
+    const overlay =
+        plannerModal?.querySelector(
+            ".planner-modal-overlay"
+        );
+
+    const plannerForm =
+        document.getElementById("planner-form");
+
+    const plannerList =
+        document.getElementById("planner-list");
+
+
+    /* Open Modal */
+
+    if (addPlanButton && plannerModal) {
+
+        addPlanButton.addEventListener(
+            "click",
+            () => {
+
+                plannerModal.hidden = false;
+
+                document
+                    .getElementById("plan-time")
+                    ?.focus();
+
+            }
+        );
+
+    }
+
+
+    /* Close Modal */
+
+    function closePlannerModal() {
+
+        if (plannerModal) {
+
+            plannerModal.hidden = true;
+
+        }
+
+    }
+
+
+    if (closeButton) {
+        closeButton.addEventListener(
+            "click",
+            closePlannerModal
+        );
+    }
+
+
+    if (cancelButton) {
+        cancelButton.addEventListener(
+            "click",
+            closePlannerModal
+        );
+    }
+
+
+    if (overlay) {
+        overlay.addEventListener(
+            "click",
+            closePlannerModal
+        );
+    }
+
+
+    /* Add Plan */
+
+    if (plannerForm) {
+
+        plannerForm.addEventListener(
+            "submit",
+            event => {
+
+                event.preventDefault();
+
+
+                const time =
+                    document.getElementById(
+                        "plan-time"
+                    ).value;
+
+                const title =
+                    document.getElementById(
+                        "plan-title"
+                    ).value.trim();
+
+                const description =
+                    document.getElementById(
+                        "plan-description"
+                    ).value.trim();
+
+
+                if (!time || !title) {
+                    return;
+                }
+                const plans =
+                    loadPlannerItems();
+
+                const newPlan = {
+
+                    id: Date.now(),
+
+                    time: time,
+
+                    title: title,
+
+                    description: description,
+
+                    completed: false
+
+                };
+
+                plans.push(newPlan);
+
+                savePlannerItems(plans);
+
+                const planElement =
+                    document.createElement("article");
+
+                planElement.className =
+                    "planner-item";
+
+
+                planElement.innerHTML = `
+
+                    <div class="planner-time">
+
+                        <span>
+                            ${formatPlannerTime(time)}
+                        </span>
+
+                    </div>
+
+
+                    <div class="planner-indicator">
+
+                        <span></span>
+
+                    </div>
+
+
+                    <div class="planner-content">
+
+                        <h3>
+                            ${escapeHTML(title)}
+                        </h3>
+
+                        <p>
+                            ${escapeHTML(
+                    description ||
+                    "No description"
+                )}
+                        </p>
+
+                    </div>
+
+                `;
+
+
+                plannerList.appendChild(
+                    planElement
+                );
+
+
+                plannerForm.reset();
+
+                closePlannerModal();
+
+            }
+        );
+
+    }
+    renderPlannerItems();
+
+}
+/* ==========================
+   Planner Helpers
+========================== */
+
+function formatPlannerTime(time) {
+
+    const [hours, minutes] =
+        time.split(":");
+
+    const date =
+        new Date();
+
+    date.setHours(
+        Number(hours),
+        Number(minutes)
+    );
+
+    return date.toLocaleTimeString(
+        [],
+        {
+            hour: "2-digit",
+            minute: "2-digit"
+        }
+    );
+
+}
+
+
+function escapeHTML(value) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent = value;
+
+    return div.innerHTML;
+
+}
+/* ==========================
    Sync Task UI
 ========================== */
 
@@ -300,6 +578,7 @@ function applyTaskFilters() {
 /* ==========================
    Dashboard Statistics
 ========================== */
+
 /**
  * Updates dashboard task statistics.
  */
@@ -332,6 +611,104 @@ function updateDashboardStats() {
 
     }
 }
+/* ==========================
+   Render Planner Items
+========================== */
+
+function renderPlannerItems() {
+
+    const plannerList =
+        document.getElementById("planner-list");
+
+    if (!plannerList) {
+        return;
+    }
+
+    const plans = loadPlannerItems();
+
+    plannerList.innerHTML = "";
+
+    plans.sort((a, b) =>
+        a.time.localeCompare(b.time)
+    );
+
+    plans.forEach(plan => {
+
+        const planElement =
+            document.createElement("article");
+
+        planElement.className =
+            "planner-item";
+
+        planElement.dataset.planId =
+            plan.id;
+
+        planElement.innerHTML = `
+
+            <div class="planner-time">
+
+                <span>
+                    ${formatPlannerTime(plan.time)}
+                </span>
+
+            </div>
+
+            <div class="planner-indicator">
+
+                <span></span>
+
+            </div>
+
+            <div class="planner-content">
+
+    <h3>
+        ${escapeHTML(plan.title)}
+    </h3>
+
+    <p>
+        ${escapeHTML(
+            plan.description ||
+            "No description"
+        )}
+    </p>
+
+    <div class="planner-actions">
+
+        <button
+            type="button"
+            class="planner-edit-button"
+            data-action="edit"
+            data-plan-id="${plan.id}"
+            aria-label="Edit plan">
+
+            <i class="fa-solid fa-pen"></i>
+
+        </button>
+
+        <button
+            type="button"
+            class="planner-delete-button"
+            data-action="delete"
+            data-plan-id="${plan.id}"
+            aria-label="Delete plan">
+
+            <i class="fa-solid fa-trash"></i>
+
+        </button>
+
+    </div>
+
+</div>
+
+        `;
+
+        plannerList.appendChild(
+            planElement
+        );
+
+    });
+
+}
 document.addEventListener("DOMContentLoaded", () => {
 
     console.log("DailyOS Initialized.");
@@ -343,5 +720,7 @@ document.addEventListener("DOMContentLoaded", () => {
     syncTaskUI();
 
     updateDashboardStats();
+
+    initializePlanner();
 
 });
