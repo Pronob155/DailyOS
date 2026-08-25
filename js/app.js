@@ -263,14 +263,51 @@ function initializePlanner() {
     const plannerList =
         document.getElementById("planner-list");
 
+    let editingPlanId = null;
 
-    /* Open Modal */
+
+    /* ==========================
+       Close Modal
+    ========================== */
+
+    function closePlannerModal() {
+
+        if (plannerModal) {
+
+            plannerModal.hidden = true;
+
+        }
+
+    }
+
+
+    /* ==========================
+       Open Modal
+    ========================== */
 
     if (addPlanButton && plannerModal) {
 
         addPlanButton.addEventListener(
             "click",
             () => {
+
+                editingPlanId = null;
+
+                plannerForm.reset();
+
+                const submitButton =
+                    document.getElementById(
+                        "planner-submit-button"
+                    );
+
+                if (submitButton) {
+
+                    submitButton.innerHTML = `
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Add Plan</span>
+                    `;
+
+                }
 
                 plannerModal.hidden = false;
 
@@ -284,44 +321,43 @@ function initializePlanner() {
     }
 
 
-    /* Close Modal */
-
-    function closePlannerModal() {
-
-        if (plannerModal) {
-
-            plannerModal.hidden = true;
-
-        }
-
-    }
-
+    /* ==========================
+       Close Buttons
+    ========================== */
 
     if (closeButton) {
+
         closeButton.addEventListener(
             "click",
             closePlannerModal
         );
+
     }
 
 
     if (cancelButton) {
+
         cancelButton.addEventListener(
             "click",
             closePlannerModal
         );
+
     }
 
 
     if (overlay) {
+
         overlay.addEventListener(
             "click",
             closePlannerModal
         );
+
     }
 
 
-    /* Add Plan */
+    /* ==========================
+       Add / Edit Plan
+    ========================== */
 
     if (plannerForm) {
 
@@ -349,78 +385,102 @@ function initializePlanner() {
 
 
                 if (!time || !title) {
+
                     return;
+
                 }
+
+
                 const plans =
                     loadPlannerItems();
 
-                const newPlan = {
 
-                    id: Date.now(),
+                /* ==========================
+                   Edit Existing Plan
+                ========================== */
 
-                    time: time,
+                if (editingPlanId !== null) {
 
-                    title: title,
+                    const plan =
+                        plans.find(
+                            item =>
+                                item.id ===
+                                editingPlanId
+                        );
 
-                    description: description,
+                    if (!plan) {
 
-                    completed: false
+                        return;
 
-                };
+                    }
 
-                plans.push(newPlan);
+                    plan.time = time;
 
-                savePlannerItems(plans);
+                    plan.title = title;
 
-                const planElement =
-                    document.createElement("article");
+                    plan.description =
+                        description;
 
-                planElement.className =
-                    "planner-item";
+                    savePlannerItems(
+                        plans
+                    );
 
+                    editingPlanId = null;
 
-                planElement.innerHTML = `
-
-                    <div class="planner-time">
-
-                        <span>
-                            ${formatPlannerTime(time)}
-                        </span>
-
-                    </div>
-
-
-                    <div class="planner-indicator">
-
-                        <span></span>
-
-                    </div>
+                }
 
 
-                    <div class="planner-content">
+                /* ==========================
+                   Add New Plan
+                ========================== */
 
-                        <h3>
-                            ${escapeHTML(title)}
-                        </h3>
+                else {
 
-                        <p>
-                            ${escapeHTML(
-                    description ||
-                    "No description"
-                )}
-                        </p>
+                    const newPlan = {
 
-                    </div>
+                        id: Date.now(),
 
-                `;
+                        time: time,
+
+                        title: title,
+
+                        description: description,
+
+                        completed: false
+
+                    };
+
+                    plans.push(newPlan);
+
+                    savePlannerItems(
+                        plans
+                    );
+
+                }
 
 
-                plannerList.appendChild(
-                    planElement
-                );
+                /* ==========================
+                   Refresh Planner
+                ========================== */
 
+                renderPlannerItems();
 
                 plannerForm.reset();
+
+
+                const submitButton =
+                    document.getElementById(
+                        "planner-submit-button"
+                    );
+
+                if (submitButton) {
+
+                    submitButton.innerHTML = `
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Add Plan</span>
+                    `;
+
+                }
 
                 closePlannerModal();
 
@@ -428,33 +488,154 @@ function initializePlanner() {
         );
 
     }
+
+
+    /* ==========================
+       Edit / Delete
+    ========================== */
+
+    if (plannerList) {
+
+        plannerList.addEventListener(
+            "click",
+            event => {
+
+                const editButton =
+                    event.target.closest(
+                        '[data-action="edit"]'
+                    );
+
+                const deleteButton =
+                    event.target.closest(
+                        '[data-action="delete"]'
+                    );
+
+
+                /* ==========================
+                   Edit Plan
+                ========================== */
+
+                if (editButton) {
+
+                    const planId =
+                        Number(
+                            editButton.dataset.planId
+                        );
+
+                    editingPlanId = planId;
+
+
+                    const plans =
+                        loadPlannerItems();
+
+                    const plan =
+                        plans.find(
+                            item =>
+                                item.id === planId
+                        );
+
+
+                    if (!plan) {
+
+                        return;
+
+                    }
+
+
+                    document.getElementById(
+                        "plan-time"
+                    ).value = plan.time;
+
+
+                    document.getElementById(
+                        "plan-title"
+                    ).value = plan.title;
+
+
+                    document.getElementById(
+                        "plan-description"
+                    ).value =
+                        plan.description || "";
+
+
+                    plannerModal.hidden = false;
+
+
+                    const submitButton =
+                        document.getElementById(
+                            "planner-submit-button"
+                        );
+
+                    if (submitButton) {
+
+                        submitButton.innerHTML = `
+                            <i class="fa-solid fa-check"></i>
+                            <span>Save Changes</span>
+                        `;
+
+                    }
+
+                    return;
+
+                }
+
+
+                /* ==========================
+                   Delete Plan
+                ========================== */
+
+                if (deleteButton) {
+
+                    const planId =
+                        Number(
+                            deleteButton.dataset.planId
+                        );
+
+
+                    const confirmed =
+                        confirm(
+                            "Are you sure you want to delete this plan?"
+                        );
+
+
+                    if (!confirmed) {
+
+                        return;
+
+                    }
+
+
+                    const plans =
+                        loadPlannerItems();
+
+
+                    const updatedPlans =
+                        plans.filter(
+                            plan =>
+                                plan.id !== planId
+                        );
+
+
+                    savePlannerItems(
+                        updatedPlans
+                    );
+
+
+                    renderPlannerItems();
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* ==========================
+       Initial Render
+    ========================== */
+
     renderPlannerItems();
-
-}
-/* ==========================
-   Planner Helpers
-========================== */
-
-function formatPlannerTime(time) {
-
-    const [hours, minutes] =
-        time.split(":");
-
-    const date =
-        new Date();
-
-    date.setHours(
-        Number(hours),
-        Number(minutes)
-    );
-
-    return date.toLocaleTimeString(
-        [],
-        {
-            hour: "2-digit",
-            minute: "2-digit"
-        }
-    );
 
 }
 
