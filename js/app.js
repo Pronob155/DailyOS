@@ -638,7 +638,31 @@ function initializePlanner() {
     renderPlannerItems();
 
 }
+/* ==========================
+   Planner Helpers
+========================== */
 
+function formatPlannerTime(time) {
+
+    const [hours, minutes] =
+        time.split(":");
+
+    const date =
+        new Date();
+
+    date.setHours(
+        Number(hours),
+        Number(minutes)
+    );
+
+    return date.toLocaleTimeString(
+        [],
+        {
+            hour: "2-digit",
+            minute: "2-digit"
+        }
+    );
+}
 
 function escapeHTML(value) {
 
