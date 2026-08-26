@@ -862,3 +862,290 @@ body {
     background: var(--background);
     color: #ef4444;
 }
+/* ==========================
+   Calendar
+========================== */
+
+.calendar-section {
+    margin-top: 24px;
+
+    background: var(--surface);
+
+    border-radius: var(--border-radius);
+
+    padding: 28px;
+
+    box-shadow: var(--shadow);
+}
+
+
+/* ==========================
+   Calendar Header
+========================== */
+
+.calendar-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 20px;
+
+    margin-bottom: 24px;
+}
+
+.calendar-header-content h2 {
+    font-size: 1.4rem;
+
+    margin-bottom: 6px;
+}
+
+
+/* ==========================
+   Calendar Controls
+========================== */
+
+.calendar-controls {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+.calendar-today-button,
+.calendar-nav-button {
+    height: 36px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border: 1px solid var(--border-color);
+
+    border-radius: 8px;
+
+    background: var(--surface-light);
+
+    color: var(--text);
+
+    font: inherit;
+
+    font-size: 0.8rem;
+
+    cursor: pointer;
+
+    transition: var(--transition);
+}
+
+.calendar-today-button {
+    padding: 0 14px;
+
+    font-weight: 600;
+}
+
+.calendar-nav-button {
+    width: 36px;
+}
+
+.calendar-today-button:hover,
+.calendar-nav-button:hover {
+    background: var(--primary);
+
+    border-color: var(--primary);
+
+    color: #ffffff;
+}
+
+
+/* ==========================
+   Month Header
+========================== */
+
+.calendar-month-header {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin-bottom: 20px;
+}
+
+.calendar-month-header h3 {
+    font-size: 1.1rem;
+
+    font-weight: 600;
+}
+
+
+/* ==========================
+   Weekdays
+========================== */
+
+.calendar-weekdays {
+    display: grid;
+
+    grid-template-columns:
+        repeat(7, minmax(0, 1fr));
+
+    margin-bottom: 8px;
+}
+
+.calendar-weekdays span {
+    text-align: center;
+
+    color: var(--text-light);
+
+    font-size: 0.75rem;
+
+    font-weight: 600;
+
+    padding: 8px;
+}
+
+
+/* ==========================
+   Calendar Grid
+========================== */
+
+.calendar-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(7, minmax(0, 1fr));
+
+    gap: 6px;
+}
+
+
+/* ==========================
+   Calendar Day
+========================== */
+
+.calendar-day {
+    min-height: 72px;
+
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: flex-end;
+
+    padding: 10px;
+
+    border: 1px solid transparent;
+
+    border-radius: 10px;
+
+    background: var(--bg);
+
+    color: var(--text);
+
+    font: inherit;
+
+    cursor: pointer;
+
+    transition: var(--transition);
+}
+
+.calendar-day:hover {
+    border-color: var(--primary);
+
+    background: var(--surface-light);
+}
+
+
+/* ==========================
+   Other Month Days
+========================== */
+
+.calendar-day.other-month {
+    color: var(--text-light);
+
+    opacity: 0.45;
+}
+
+
+/* ==========================
+   Today
+========================== */
+
+.calendar-day.today {
+    border-color: var(--primary);
+}
+
+
+/* ==========================
+   Selected Date
+========================== */
+
+.calendar-day.selected {
+    background: var(--primary);
+
+    color: #ffffff;
+
+    border-color: var(--primary);
+}
+
+.calendar-day.selected:hover {
+    background: var(--primary-hover);
+}
+
+
+/* ==========================
+   Responsive Calendar
+========================== */
+
+@media (max-width: 768px) {
+
+    .calendar-header {
+        flex-direction: column;
+    }
+
+    .calendar-controls {
+        width: 100%;
+
+        justify-content: flex-end;
+    }
+
+    .calendar-day {
+        min-height: 52px;
+
+        padding: 8px;
+
+        font-size: 0.8rem;
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .calendar-section {
+        padding: 20px;
+    }
+
+    .calendar-weekdays span {
+        font-size: 0.65rem;
+    }
+
+    .calendar-grid {
+        gap: 3px;
+    }
+
+    .calendar-day {
+        min-height: 42px;
+
+        padding: 6px;
+
+        border-radius: 7px;
+    }
+
+    .calendar-today-button {
+        padding: 0 10px;
+    }
+
+}
