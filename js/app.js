@@ -914,6 +914,372 @@ function renderPlannerItems() {
     });
 
 }
+/* ==========================
+   Calendar
+========================== */
+
+let currentCalendarDate = new Date();
+
+let selectedCalendarDate = new Date();
+
+
+/**
+ * Formats a date as YYYY-MM-DD.
+ *
+ * @param {Date} date
+ * @returns {string}
+ */
+function getCalendarDateKey(date) {
+
+    const year = date.getFullYear();
+
+    const month =
+        String(date.getMonth() + 1).padStart(2, "0");
+
+    const day =
+        String(date.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+}
+
+
+/**
+ * Checks whether two dates represent
+ * the same calendar day.
+ *
+ * @param {Date} firstDate
+ * @param {Date} secondDate
+ * @returns {boolean}
+ */
+function isSameCalendarDate(firstDate, secondDate) {
+
+    return (
+        firstDate.getFullYear() === secondDate.getFullYear() &&
+        firstDate.getMonth() === secondDate.getMonth() &&
+        firstDate.getDate() === secondDate.getDate()
+    );
+}
+
+
+/**
+ * Renders the current calendar month.
+ */
+function renderCalendar() {
+
+    const calendarGrid =
+        document.getElementById("calendar-grid");
+
+    const calendarMonth =
+        document.getElementById("calendar-month");
+
+    if (!calendarGrid || !calendarMonth) {
+        return;
+    }
+
+
+    const year =
+        currentCalendarDate.getFullYear();
+
+    const month =
+        currentCalendarDate.getMonth();
+
+
+    const monthName =
+        currentCalendarDate.toLocaleDateString(
+            "en-US",
+            {
+                month: "long",
+                year: "numeric"
+            }
+        );
+
+    calendarMonth.textContent = monthName;
+
+
+    /*
+     * First day of the month.
+     */
+    const firstDay =
+        new Date(year, month, 1);
+
+    /*
+     * Last day of the month.
+     */
+    const lastDay =
+        new Date(year, month + 1, 0);
+
+
+    const firstWeekday =
+        firstDay.getDay();
+
+    const totalDays =
+        lastDay.getDate();
+
+
+    /*
+     * Previous month's last day.
+     */
+    const previousMonthLastDay =
+        new Date(year, month, 0).getDate();
+
+
+    calendarGrid.innerHTML = "";
+
+
+    /*
+     * Previous month dates.
+     */
+    for (
+        let index = firstWeekday - 1;
+        index >= 0;
+        index--
+    ) {
+
+        const dayNumber =
+            previousMonthLastDay - index;
+
+        const date =
+            new Date(year, month - 1, dayNumber);
+
+        createCalendarDay(
+            date,
+            true,
+            calendarGrid
+        );
+    }
+
+
+    /*
+     * Current month dates.
+     */
+    for (
+        let day = 1;
+        day <= totalDays;
+        day++
+    ) {
+
+        const date =
+            new Date(year, month, day);
+
+        createCalendarDay(
+            date,
+            false,
+            calendarGrid
+        );
+    }
+
+
+    /*
+     * Next month dates.
+     *
+     * Fill the final row so that
+     * the calendar always remains
+     * visually consistent.
+     */
+    const totalCells =
+        calendarGrid.children.length;
+
+    const remainingCells =
+        (7 - (totalCells % 7)) % 7;
+
+
+    for (
+        let day = 1;
+        day <= remainingCells;
+        day++
+    ) {
+
+        const date =
+            new Date(year, month + 1, day);
+
+        createCalendarDay(
+            date,
+            true,
+            calendarGrid
+        );
+    }
+}
+
+
+/**
+ * Creates a calendar day element.
+ *
+ * @param {Date} date
+ * @param {boolean} isOtherMonth
+ * @param {HTMLElement} container
+ */
+function createCalendarDay(
+    date,
+    isOtherMonth,
+    container
+) {
+
+    const dayButton =
+        document.createElement("button");
+
+    dayButton.type = "button";
+
+    dayButton.className =
+        "calendar-day";
+
+    dayButton.textContent =
+        date.getDate();
+
+
+    if (isOtherMonth) {
+
+        dayButton.classList.add(
+            "other-month"
+        );
+    }
+
+
+    const today =
+        new Date();
+
+    if (isSameCalendarDate(date, today)) {
+
+        dayButton.classList.add(
+            "today"
+        );
+    }
+
+
+    if (
+        isSameCalendarDate(
+            date,
+            selectedCalendarDate
+        )
+    ) {
+
+        dayButton.classList.add(
+            "selected"
+        );
+    }
+
+
+    dayButton.dataset.date =
+        getCalendarDateKey(date);
+
+
+    dayButton.addEventListener(
+        "click",
+        () => {
+
+            selectedCalendarDate =
+                new Date(date);
+
+            /*
+             * If an overflow date is selected,
+             * move the calendar to that month.
+             */
+            if (isOtherMonth) {
+
+                currentCalendarDate =
+                    new Date(
+                        date.getFullYear(),
+                        date.getMonth(),
+                        1
+                    );
+            }
+
+            renderCalendar();
+        }
+    );
+
+
+    container.appendChild(
+        dayButton
+    );
+}
+
+
+/**
+ * Initializes Calendar controls.
+ */
+function initializeCalendar() {
+
+    const previousButton =
+        document.getElementById(
+            "calendar-prev"
+        );
+
+    const nextButton =
+        document.getElementById(
+            "calendar-next"
+        );
+
+    const todayButton =
+        document.getElementById(
+            "calendar-today-button"
+        );
+
+
+    if (previousButton) {
+
+        previousButton.addEventListener(
+            "click",
+            () => {
+
+                currentCalendarDate =
+                    new Date(
+                        currentCalendarDate.getFullYear(),
+                        currentCalendarDate.getMonth() - 1,
+                        1
+                    );
+
+                renderCalendar();
+            }
+        );
+    }
+
+
+    if (nextButton) {
+
+        nextButton.addEventListener(
+            "click",
+            () => {
+
+                currentCalendarDate =
+                    new Date(
+                        currentCalendarDate.getFullYear(),
+                        currentCalendarDate.getMonth() + 1,
+                        1
+                    );
+
+                renderCalendar();
+            }
+        );
+    }
+
+
+    if (todayButton) {
+
+        todayButton.addEventListener(
+            "click",
+            () => {
+
+                const today =
+                    new Date();
+
+                currentCalendarDate =
+                    new Date(
+                        today.getFullYear(),
+                        today.getMonth(),
+                        1
+                    );
+
+                selectedCalendarDate =
+                    new Date(today);
+
+                renderCalendar();
+            }
+        );
+    }
+
+
+    renderCalendar();
+}
 document.addEventListener("DOMContentLoaded", () => {
 
     console.log("DailyOS Initialized.");
@@ -927,5 +1293,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateDashboardStats();
 
     initializePlanner();
+
+     initializeCalendar();
 
 });
