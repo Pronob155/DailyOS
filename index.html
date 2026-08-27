@@ -657,9 +657,165 @@
                     </div>
 
                 </section>
-                <!-- ==========================
-     Calendar
-========================== -->
+                <!-- ==========================Study Tracker========================== -->
+
+                <section class="study-section">
+
+                    <div class="study-header">
+
+                        <div class="study-header-content">
+
+                            <p class="section-label">
+                                LEARNING
+                            </p>
+
+                            <h2>
+                                Study Tracker
+                            </h2>
+
+                            <p class="section-description">
+                                Track your study sessions and learning progress.
+                            </p>
+
+                        </div>
+
+                        <button type="button" class="study-add-button" id="study-add-button">
+
+                            <i class="fa-solid fa-plus"></i>
+
+                            <span>Add Study</span>
+
+                        </button>
+
+                    </div>
+
+
+                    <!-- Study Summary -->
+
+                    <div class="study-summary">
+
+                        <div class="study-summary-icon">
+
+                            <i class="fa-solid fa-book-open"></i>
+
+                        </div>
+
+                        <div>
+
+                            <span class="study-summary-label">
+                                Today's Study Time
+                            </span>
+
+                            <strong id="study-total-time">
+                                0h 0m
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Study Sessions -->
+
+                    <div class="study-list" id="study-list">
+
+                    </div>
+
+
+                    <!-- Study Modal -->
+
+                    <div class="study-modal" id="study-modal" hidden>
+
+                        <div class="study-modal-overlay"></div>
+
+                        <div class="study-modal-content" role="dialog" aria-modal="true"
+                            aria-labelledby="study-modal-title">
+
+                            <div class="study-modal-header">
+
+                                <div>
+
+                                    <p class="section-label">
+                                        LEARNING
+                                    </p>
+
+                                    <h2 id="study-modal-title">
+                                        Add Study Session
+                                    </h2>
+
+                                </div>
+
+                                <button type="button" class="study-modal-close" id="study-modal-close"
+                                    aria-label="Close">
+
+                                    <i class="fa-solid fa-xmark"></i>
+
+                                </button>
+
+                            </div>
+
+
+                            <form id="study-form">
+
+                                <div class="form-group">
+
+                                    <label for="study-subject">
+                                        Subject / Topic
+                                    </label>
+
+                                    <input type="text" id="study-subject" placeholder="e.g. Data Structures" required>
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label for="study-duration">
+                                        Duration
+                                    </label>
+
+                                    <input type="number" id="study-duration" min="1" placeholder="Minutes" required>
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label for="study-notes">
+                                        Notes
+                                    </label>
+
+                                    <textarea id="study-notes" rows="3" placeholder="What did you study?"></textarea>
+
+                                </div>
+
+
+                                <div class="study-form-actions">
+
+                                    <button type="button" class="study-cancel-button" id="study-cancel-button">
+
+                                        Cancel
+
+                                    </button>
+
+                                    <button type="submit" class="study-save-button">
+
+                                        <i class="fa-solid fa-plus"></i>
+
+                                        <span>Add Session</span>
+
+                                    </button>
+
+                                </div>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </section>
+                <!-- ==========================Calendar========================== -->
 
                 <section class="calendar-section">
 
