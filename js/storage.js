@@ -11,9 +11,57 @@
 ========================== */
 
 const STORAGE_KEYS = {
-    tasks: "dailyos_tasks"
+    tasks: "dailyos_tasks",
+    studySessions: "dailyos_study_sessions"
 };
+/* ==========================
+   Study Session Storage
+========================== */
 
+/**
+ * Save study sessions to Local Storage.
+ *
+ * @param {Array} sessions
+ */
+function saveStudySessions(sessions) {
+
+    localStorage.setItem(
+        STORAGE_KEYS.studySessions,
+        JSON.stringify(sessions)
+    );
+}
+
+
+/**
+ * Load study sessions from Local Storage.
+ *
+ * @returns {Array}
+ */
+function loadStudySessions() {
+
+    const storedSessions =
+        localStorage.getItem(
+            STORAGE_KEYS.studySessions
+        );
+
+    if (!storedSessions) {
+        return [];
+    }
+
+    try {
+
+        return JSON.parse(storedSessions);
+
+    } catch (error) {
+
+        console.error(
+            "Failed to load study sessions:",
+            error
+        );
+
+        return [];
+    }
+}
 
 /* ==========================
    Task Storage
@@ -64,5 +112,7 @@ function loadTasks() {
 }
 export {
     saveTasks,
-    loadTasks
+    loadTasks,
+    saveStudySessions,
+    loadStudySessions
 };
