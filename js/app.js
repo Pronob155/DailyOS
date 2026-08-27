@@ -11,9 +11,10 @@ Main JavaScript Entry Point
 
 import {
     saveTasks,
-    loadTasks
+    loadTasks,
+    saveStudySessions,
+    loadStudySessions
 } from "./storage.js";
-
 
 /* ==========================
    Initial Task Data
@@ -638,6 +639,7 @@ function initializePlanner() {
     renderPlannerItems();
 
 }
+
 /* ==========================
    Planner Helpers
 ========================== */
@@ -662,6 +664,348 @@ function formatPlannerTime(time) {
             minute: "2-digit"
         }
     );
+}
+/* ==========================
+   Study Tracker
+========================== */
+
+/**
+ * Formats study duration.
+ *
+ * @param {number} minutes
+ * @returns {string}
+ */
+function formatStudyDuration(minutes) {
+
+    const hours =
+        Math.floor(minutes / 60);
+
+    const remainingMinutes =
+        minutes % 60;
+
+    if (hours === 0) {
+        return `${remainingMinutes}m`;
+    }
+
+    return `${hours}h ${remainingMinutes}m`;
+}
+
+
+/**
+ * Renders all study sessions.
+ */
+function renderStudySessions() {
+
+    const studyList =
+        document.getElementById("study-list");
+
+    const totalTime =
+        document.getElementById("study-total-time");
+
+    if (!studyList || !totalTime) {
+        return;
+    }
+
+    const sessions =
+        loadStudySessions();
+
+
+    studyList.innerHTML = "";
+
+
+    if (sessions.length === 0) {
+
+        studyList.innerHTML = `
+            <div class="study-empty">
+                No study sessions yet.
+            </div>
+        `;
+
+        totalTime.textContent = "0h 0m";
+
+        return;
+    }
+
+
+    let totalMinutes = 0;
+
+
+    sessions.forEach(session => {
+
+        totalMinutes +=
+            Number(session.duration);
+
+
+        const studyItem =
+            document.createElement("article");
+
+        studyItem.className =
+            "study-item";
+
+        studyItem.dataset.studyId =
+            session.id;
+
+
+        studyItem.innerHTML = `
+
+            <div class="study-item-icon">
+
+                <i class="fa-solid fa-book-open"></i>
+
+            </div>
+
+
+            <div class="study-item-content">
+
+                <h3>
+                    ${escapeHTML(session.subject)}
+                </h3>
+
+                <p>
+                    ${escapeHTML(
+                        session.notes ||
+                        "Study session"
+                    )}
+                </p>
+
+            </div>
+
+
+            <span class="study-item-duration">
+
+                ${formatStudyDuration(
+                    Number(session.duration)
+                )}
+
+            </span>
+
+
+            <button
+                type="button"
+                class="study-delete-button"
+                data-action="delete-study"
+                data-study-id="${session.id}"
+                aria-label="Delete study session">
+
+                <i class="fa-solid fa-trash"></i>
+
+            </button>
+        `;
+
+
+        studyList.appendChild(
+            studyItem
+        );
+
+    });
+
+
+    totalTime.textContent =
+        formatStudyDuration(totalMinutes);
+}
+
+
+/**
+ * Initializes Study Tracker.
+ */
+function initializeStudyTracker() {
+
+    const addButton =
+        document.getElementById(
+            "study-add-button"
+        );
+
+    const modal =
+        document.getElementById(
+            "study-modal"
+        );
+
+    const closeButton =
+        document.getElementById(
+            "study-modal-close"
+        );
+
+    const cancelButton =
+        document.getElementById(
+            "study-cancel-button"
+        );
+
+    const overlay =
+        modal?.querySelector(
+            ".study-modal-overlay"
+        );
+
+    const form =
+        document.getElementById(
+            "study-form"
+        );
+
+    const studyList =
+        document.getElementById(
+            "study-list"
+        );
+
+
+    function closeModal() {
+
+        if (modal) {
+            modal.hidden = true;
+        }
+
+        form?.reset();
+    }
+
+
+    function openModal() {
+
+        if (modal) {
+            modal.hidden = false;
+        }
+    }
+
+
+    addButton?.addEventListener(
+        "click",
+        openModal
+    );
+
+
+    closeButton?.addEventListener(
+        "click",
+        closeModal
+    );
+
+
+    cancelButton?.addEventListener(
+        "click",
+        closeModal
+    );
+
+
+    overlay?.addEventListener(
+        "click",
+        closeModal
+    );
+
+
+    form?.addEventListener(
+        "submit",
+        event => {
+
+            event.preventDefault();
+
+
+            const subject =
+                document.getElementById(
+                    "study-subject"
+                ).value.trim();
+
+
+            const duration =
+                Number(
+                    document.getElementById(
+                        "study-duration"
+                    ).value
+                );
+
+
+            const notes =
+                document.getElementById(
+                    "study-notes"
+                ).value.trim();
+
+
+            if (
+                !subject ||
+                !duration ||
+                duration <= 0
+            ) {
+                return;
+            }
+
+
+            const sessions =
+                loadStudySessions();
+
+
+            const newSession = {
+
+                id: Date.now(),
+
+                subject,
+
+                duration,
+
+                notes,
+
+                createdAt:
+                    new Date().toISOString()
+
+            };
+
+
+            sessions.push(
+                newSession
+            );
+
+
+            saveStudySessions(
+                sessions
+            );
+
+
+            renderStudySessions();
+
+            closeModal();
+
+        }
+    );
+
+
+    studyList?.addEventListener(
+        "click",
+        event => {
+
+            const deleteButton =
+                event.target.closest(
+                    '[data-action="delete-study"]'
+                );
+
+
+            if (!deleteButton) {
+                return;
+            }
+
+
+            const studyId =
+                Number(
+                    deleteButton.dataset.studyId
+                );
+
+
+            const sessions =
+                loadStudySessions();
+
+
+            const updatedSessions =
+                sessions.filter(
+                    session =>
+                        session.id !== studyId
+                );
+
+
+            saveStudySessions(
+                updatedSessions
+            );
+
+
+            renderStudySessions();
+
+        }
+    );
+
+
+    renderStudySessions();
 }
 
 function escapeHTML(value) {
@@ -1285,15 +1629,11 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("DailyOS Initialized.");
 
     initializeApp();
-
     initializeTaskEvents();
-
     syncTaskUI();
-
     updateDashboardStats();
-
     initializePlanner();
-
-     initializeCalendar();
+    initializeStudyTracker();
+    initializeCalendar();
 
 });
