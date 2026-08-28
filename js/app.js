@@ -2015,6 +2015,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateDashboardStats();
     initializePlanner();
     initializeStudyTracker();
+    initializePomodoro();
     initializeCalendar();
 
 });
