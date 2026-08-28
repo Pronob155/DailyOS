@@ -1624,6 +1624,387 @@ function initializeCalendar() {
 
     renderCalendar();
 }
+/* ==========================
+   Pomodoro Timer
+========================== */
+
+const POMODORO_DURATIONS = {
+    focus: 25 * 60,
+    "short-break": 5 * 60
+};
+
+
+let pomodoroMode = "focus";
+
+let pomodoroTimeRemaining =
+    POMODORO_DURATIONS.focus;
+
+let pomodoroTimerId = null;
+
+let pomodoroIsRunning = false;
+
+let pomodoroFocusCount = 0;
+
+let pomodoroBreakCount = 0;
+
+
+/**
+ * Formats seconds into MM:SS.
+ *
+ * @param {number} totalSeconds
+ * @returns {string}
+ */
+function formatPomodoroTime(totalSeconds) {
+
+    const minutes =
+        Math.floor(totalSeconds / 60);
+
+    const seconds =
+        totalSeconds % 60;
+
+    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+}
+
+
+/**
+ * Updates timer display.
+ */
+function updatePomodoroDisplay() {
+
+    const timer =
+        document.getElementById(
+            "pomodoro-timer"
+        );
+
+    const progressBar =
+        document.getElementById(
+            "pomodoro-progress-bar"
+        );
+
+
+    if (timer) {
+
+        timer.textContent =
+            formatPomodoroTime(
+                pomodoroTimeRemaining
+            );
+    }
+
+
+    if (progressBar) {
+
+        const totalDuration =
+            POMODORO_DURATIONS[
+                pomodoroMode
+            ];
+
+
+        const progress =
+            (
+                pomodoroTimeRemaining /
+                totalDuration
+            ) * 100;
+
+
+        progressBar.style.width =
+            `${progress}%`;
+    }
+}
+
+
+/**
+ * Updates mode button states.
+ */
+function updatePomodoroModeUI() {
+
+    const modeButtons =
+        document.querySelectorAll(
+            ".pomodoro-mode-button"
+        );
+
+
+    modeButtons.forEach(button => {
+
+        button.classList.toggle(
+            "active",
+            button.dataset.mode ===
+            pomodoroMode
+        );
+
+    });
+}
+
+
+/**
+ * Updates start/pause button.
+ */
+function updatePomodoroControlUI() {
+
+    const startButton =
+        document.getElementById(
+            "pomodoro-start-button"
+        );
+
+
+    if (!startButton) {
+        return;
+    }
+
+
+    if (pomodoroIsRunning) {
+
+        startButton.innerHTML = `
+            <i class="fa-solid fa-pause"></i>
+            <span>Pause</span>
+        `;
+
+    } else {
+
+        startButton.innerHTML = `
+            <i class="fa-solid fa-play"></i>
+            <span>Start</span>
+        `;
+    }
+}
+
+
+/**
+ * Updates completed session counters.
+ */
+function updatePomodoroStats() {
+
+    const focusCount =
+        document.getElementById(
+            "pomodoro-focus-count"
+        );
+
+    const breakCount =
+        document.getElementById(
+            "pomodoro-break-count"
+        );
+
+
+    if (focusCount) {
+
+        focusCount.textContent =
+            pomodoroFocusCount;
+    }
+
+
+    if (breakCount) {
+
+        breakCount.textContent =
+            pomodoroBreakCount;
+    }
+}
+
+
+/**
+ * Switches timer mode.
+ *
+ * @param {string} mode
+ */
+function setPomodoroMode(mode) {
+
+    if (
+        !POMODORO_DURATIONS[mode]
+    ) {
+        return;
+    }
+
+
+    stopPomodoroTimer();
+
+
+    pomodoroMode = mode;
+
+    pomodoroTimeRemaining =
+        POMODORO_DURATIONS[mode];
+
+
+    updatePomodoroModeUI();
+
+    updatePomodoroDisplay();
+
+    updatePomodoroControlUI();
+}
+
+
+/**
+ * Starts Pomodoro timer.
+ */
+function startPomodoroTimer() {
+
+    if (pomodoroIsRunning) {
+        return;
+    }
+
+
+    pomodoroIsRunning = true;
+
+    updatePomodoroControlUI();
+
+
+    pomodoroTimerId =
+        setInterval(() => {
+
+            pomodoroTimeRemaining--;
+
+
+            updatePomodoroDisplay();
+
+
+            if (
+                pomodoroTimeRemaining <= 0
+            ) {
+
+                completePomodoroSession();
+
+            }
+
+        }, 1000);
+}
+
+
+/**
+ * Stops Pomodoro timer.
+ */
+function stopPomodoroTimer() {
+
+    if (pomodoroTimerId !== null) {
+
+        clearInterval(
+            pomodoroTimerId
+        );
+
+        pomodoroTimerId = null;
+    }
+
+
+    pomodoroIsRunning = false;
+
+    updatePomodoroControlUI();
+}
+
+
+/**
+ * Resets current timer.
+ */
+function resetPomodoroTimer() {
+
+    stopPomodoroTimer();
+
+
+    pomodoroTimeRemaining =
+        POMODORO_DURATIONS[
+            pomodoroMode
+        ];
+
+
+    updatePomodoroDisplay();
+}
+
+
+/**
+ * Handles completed Pomodoro session.
+ */
+function completePomodoroSession() {
+
+    stopPomodoroTimer();
+
+
+    if (pomodoroMode === "focus") {
+
+        pomodoroFocusCount++;
+
+        setPomodoroMode(
+            "short-break"
+        );
+
+    } else {
+
+        pomodoroBreakCount++;
+
+        setPomodoroMode(
+            "focus"
+        );
+    }
+
+
+    updatePomodoroStats();
+
+    updatePomodoroDisplay();
+}
+
+
+/**
+ * Initializes Pomodoro Timer.
+ */
+function initializePomodoro() {
+
+    const startButton =
+        document.getElementById(
+            "pomodoro-start-button"
+        );
+
+    const resetButton =
+        document.getElementById(
+            "pomodoro-reset-button"
+        );
+
+    const modeButtons =
+        document.querySelectorAll(
+            ".pomodoro-mode-button"
+        );
+
+
+    startButton?.addEventListener(
+        "click",
+        () => {
+
+            if (pomodoroIsRunning) {
+
+                stopPomodoroTimer();
+
+            } else {
+
+                startPomodoroTimer();
+
+            }
+        }
+    );
+
+
+    resetButton?.addEventListener(
+        "click",
+        resetPomodoroTimer
+    );
+
+
+    modeButtons.forEach(button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                setPomodoroMode(
+                    button.dataset.mode
+                );
+
+            }
+        );
+
+    });
+
+
+    updatePomodoroDisplay();
+
+    updatePomodoroModeUI();
+
+    updatePomodoroControlUI();
+
+    updatePomodoroStats();
+}
 document.addEventListener("DOMContentLoaded", () => {
 
     console.log("DailyOS Initialized.");
