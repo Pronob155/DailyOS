@@ -162,5 +162,7 @@ export {
     saveTasks,
     loadTasks,
     saveStudySessions,
-    loadStudySessions
+    loadStudySessions,
+    saveNotes,
+    loadNotes
 };
