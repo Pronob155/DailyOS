@@ -936,6 +936,156 @@
                     </div>
 
                 </section>
+                <!-- ==========================Notes========================== -->
+
+                <section class="notes-section">
+
+                    <div class="notes-header">
+
+                        <div>
+
+                            <p class="section-label">
+                                PERSONAL
+                            </p>
+
+                            <h2>
+                                Notes
+                            </h2>
+
+                            <p class="section-description">
+                                Save your ideas, reminders and important information.
+                            </p>
+
+                        </div>
+
+                        <button type="button" class="notes-add-button" id="notes-add-button">
+
+                            <i class="fa-solid fa-plus"></i>
+
+                            <span>Add Note</span>
+
+                        </button>
+
+                    </div>
+
+
+                    <!-- Notes Search -->
+
+                    <div class="notes-search">
+
+                        <i class="fa-solid fa-magnifying-glass"></i>
+
+                        <input type="search" id="notes-search-input" placeholder="Search notes...">
+
+                    </div>
+
+
+                    <!-- Notes Grid -->
+
+                    <div class="notes-grid" id="notes-grid">
+                    </div>
+
+
+                    <!-- Note Modal -->
+
+                    <div class="notes-modal" id="notes-modal" hidden>
+
+                        <div class="notes-modal-overlay"></div>
+
+
+                        <div class="notes-modal-content" role="dialog" aria-modal="true"
+                            aria-labelledby="notes-modal-title">
+
+                            <div class="notes-modal-header">
+
+                                <div>
+
+                                    <p class="section-label">
+                                        PERSONAL
+                                    </p>
+
+                                    <h2 id="notes-modal-title">
+                                        Add Note
+                                    </h2>
+
+                                </div>
+
+
+                                <button type="button" class="notes-modal-close" id="notes-modal-close"
+                                    aria-label="Close">
+
+                                    <i class="fa-solid fa-xmark"></i>
+
+                                </button>
+
+                            </div>
+
+
+                            <form id="notes-form">
+
+                                <input type="hidden" id="notes-edit-id">
+
+
+                                <div class="form-group">
+
+                                    <label for="notes-title">
+                                        Title
+                                    </label>
+
+                                    <input type="text" id="notes-title" placeholder="Note title" required>
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label for="notes-content">
+                                        Content
+                                    </label>
+
+                                    <textarea id="notes-content" rows="7" placeholder="Write your note here..."
+                                        required></textarea>
+
+                                </div>
+
+
+                                <label class="notes-pin-option">
+
+                                    <input type="checkbox" id="notes-pinned">
+
+                                    <span>
+                                        Pin this note
+                                    </span>
+
+                                </label>
+
+
+                                <div class="notes-form-actions">
+
+                                    <button type="button" class="notes-cancel-button" id="notes-cancel-button">
+
+                                        Cancel
+
+                                    </button>
+
+
+                                    <button type="submit" class="notes-save-button">
+
+                                        <i class="fa-solid fa-floppy-disk"></i>
+
+                                        <span>Save Note</span>
+
+                                    </button>
+
+                                </div>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </section>
                 <!-- ==========================Calendar========================== -->
 
                 <section class="calendar-section">
