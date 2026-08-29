@@ -12,7 +12,8 @@
 
 const STORAGE_KEYS = {
     tasks: "dailyos_tasks",
-    studySessions: "dailyos_study_sessions"
+    studySessions: "dailyos_study_sessions",
+    notes: "dailyos_notes"
 };
 /* ==========================
    Study Session Storage
