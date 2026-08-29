@@ -63,7 +63,54 @@ function loadStudySessions() {
         return [];
     }
 }
+/* ==========================
+   Notes Storage
+========================== */
 
+/**
+ * Save notes to Local Storage.
+ *
+ * @param {Array} notes
+ */
+function saveNotes(notes) {
+
+    localStorage.setItem(
+        STORAGE_KEYS.notes,
+        JSON.stringify(notes)
+    );
+}
+
+
+/**
+ * Load notes from Local Storage.
+ *
+ * @returns {Array}
+ */
+function loadNotes() {
+
+    const storedNotes =
+        localStorage.getItem(
+            STORAGE_KEYS.notes
+        );
+
+    if (!storedNotes) {
+        return [];
+    }
+
+    try {
+
+        return JSON.parse(storedNotes);
+
+    } catch (error) {
+
+        console.error(
+            "Failed to load notes:",
+            error
+        );
+
+        return [];
+    }
+}
 /* ==========================
    Task Storage
 ========================== */
