@@ -2007,6 +2007,653 @@ function initializePomodoro() {
 
     updatePomodoroStats();
 }
+/* ==========================
+   Notes
+========================== */
+
+
+/**
+ * Escapes note text before rendering.
+ *
+ * @param {string} value
+ * @returns {string}
+ */
+function escapeNoteHTML(value) {
+
+    const element =
+        document.createElement("div");
+
+    element.textContent = value;
+
+    return element.innerHTML;
+}
+
+
+/**
+ * Formats note date.
+ *
+ * @param {string} dateString
+ * @returns {string}
+ */
+function formatNoteDate(dateString) {
+
+    const date =
+        new Date(dateString);
+
+    return date.toLocaleDateString(
+        "en-US",
+        {
+            day: "numeric",
+            month: "short",
+            year: "numeric"
+        }
+    );
+}
+
+
+/**
+ * Renders notes.
+ *
+ * @param {string} searchQuery
+ */
+function renderNotes(searchQuery = "") {
+
+    const notesGrid =
+        document.getElementById(
+            "notes-grid"
+        );
+
+    if (!notesGrid) {
+        return;
+    }
+
+
+    const normalizedQuery =
+        searchQuery
+            .trim()
+            .toLowerCase();
+
+
+    let notes =
+        loadNotes();
+
+
+    /*
+     * Search filter.
+     */
+    if (normalizedQuery) {
+
+        notes =
+            notes.filter(note => {
+
+                return (
+                    note.title
+                        .toLowerCase()
+                        .includes(
+                            normalizedQuery
+                        ) ||
+                    note.content
+                        .toLowerCase()
+                        .includes(
+                            normalizedQuery
+                        )
+                );
+
+            });
+
+    }
+
+
+    /*
+     * Pinned notes first.
+     */
+    notes.sort(
+        (firstNote, secondNote) => {
+
+            if (
+                firstNote.pinned !==
+                secondNote.pinned
+            ) {
+
+                return Number(
+                    secondNote.pinned
+                ) - Number(
+                    firstNote.pinned
+                );
+
+            }
+
+
+            return new Date(
+                secondNote.updatedAt
+            ) - new Date(
+                firstNote.updatedAt
+            );
+
+        }
+    );
+
+
+    notesGrid.innerHTML = "";
+
+
+    if (notes.length === 0) {
+
+        notesGrid.innerHTML = `
+
+            <div class="notes-empty">
+
+                <i class="fa-solid fa-note-sticky"></i>
+
+                <p>
+                    ${normalizedQuery
+                        ? "No notes found."
+                        : "No notes yet. Create your first note."}
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    notes.forEach(note => {
+
+        const noteCard =
+            document.createElement(
+                "article"
+            );
+
+        noteCard.className =
+            "note-card";
+
+
+        if (note.pinned) {
+
+            noteCard.classList.add(
+                "pinned"
+            );
+        }
+
+
+        noteCard.innerHTML = `
+
+            <div class="note-card-header">
+
+                <h3>
+                    ${escapeNoteHTML(
+                        note.title
+                    )}
+                </h3>
+
+
+                ${note.pinned
+                    ? `
+                        <i
+                            class="fa-solid fa-thumbtack note-pin-icon"
+                            aria-label="Pinned note">
+                        </i>
+                    `
+                    : ""
+                }
+
+            </div>
+
+
+            <div class="note-card-content">
+
+                ${escapeNoteHTML(
+                    note.content
+                )}
+
+            </div>
+
+
+            <div class="note-card-footer">
+
+                <span class="note-card-date">
+
+                    ${formatNoteDate(
+                        note.updatedAt
+                    )}
+
+                </span>
+
+
+                <div class="note-card-actions">
+
+                    <button
+                        type="button"
+                        class="note-action-button"
+                        data-action="edit-note"
+                        data-note-id="${note.id}"
+                        aria-label="Edit note">
+
+                        <i class="fa-solid fa-pen"></i>
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="note-action-button delete"
+                        data-action="delete-note"
+                        data-note-id="${note.id}"
+                        aria-label="Delete note">
+
+                        <i class="fa-solid fa-trash"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        `;
+
+
+        notesGrid.appendChild(
+            noteCard
+        );
+
+    });
+}
+
+
+/**
+ * Initializes Notes feature.
+ */
+function initializeNotes() {
+
+    const addButton =
+        document.getElementById(
+            "notes-add-button"
+        );
+
+    const modal =
+        document.getElementById(
+            "notes-modal"
+        );
+
+    const closeButton =
+        document.getElementById(
+            "notes-modal-close"
+        );
+
+    const cancelButton =
+        document.getElementById(
+            "notes-cancel-button"
+        );
+
+    const overlay =
+        modal?.querySelector(
+            ".notes-modal-overlay"
+        );
+
+    const form =
+        document.getElementById(
+            "notes-form"
+        );
+
+    const searchInput =
+        document.getElementById(
+            "notes-search-input"
+        );
+
+    const notesGrid =
+        document.getElementById(
+            "notes-grid"
+        );
+
+    const titleInput =
+        document.getElementById(
+            "notes-title"
+        );
+
+    const contentInput =
+        document.getElementById(
+            "notes-content"
+        );
+
+    const pinnedInput =
+        document.getElementById(
+            "notes-pinned"
+        );
+
+    const editIdInput =
+        document.getElementById(
+            "notes-edit-id"
+        );
+
+    const modalTitle =
+        document.getElementById(
+            "notes-modal-title"
+        );
+
+
+    /**
+     * Opens modal for new note.
+     */
+    function openAddModal() {
+
+        form?.reset();
+
+        if (editIdInput) {
+            editIdInput.value = "";
+        }
+
+        if (modalTitle) {
+            modalTitle.textContent =
+                "Add Note";
+        }
+
+        if (modal) {
+            modal.hidden = false;
+        }
+
+        titleInput?.focus();
+    }
+
+
+    /**
+     * Opens modal for editing.
+     *
+     * @param {Object} note
+     */
+    function openEditModal(note) {
+
+        if (
+            !titleInput ||
+            !contentInput ||
+            !pinnedInput ||
+            !editIdInput
+        ) {
+            return;
+        }
+
+
+        titleInput.value =
+            note.title;
+
+        contentInput.value =
+            note.content;
+
+        pinnedInput.checked =
+            Boolean(note.pinned);
+
+        editIdInput.value =
+            note.id;
+
+
+        if (modalTitle) {
+            modalTitle.textContent =
+                "Edit Note";
+        }
+
+
+        if (modal) {
+            modal.hidden = false;
+        }
+
+
+        titleInput.focus();
+    }
+
+
+    /**
+     * Closes modal.
+     */
+    function closeModal() {
+
+        if (modal) {
+            modal.hidden = true;
+        }
+
+        form?.reset();
+    }
+
+
+    addButton?.addEventListener(
+        "click",
+        openAddModal
+    );
+
+    closeButton?.addEventListener(
+        "click",
+        closeModal
+    );
+
+    cancelButton?.addEventListener(
+        "click",
+        closeModal
+    );
+
+    overlay?.addEventListener(
+        "click",
+        closeModal
+    );
+
+
+    /*
+     * Save / update note.
+     */
+    form?.addEventListener(
+        "submit",
+        event => {
+
+            event.preventDefault();
+
+
+            const title =
+                titleInput
+                    ?.value
+                    .trim();
+
+            const content =
+                contentInput
+                    ?.value
+                    .trim();
+
+            const pinned =
+                Boolean(
+                    pinnedInput?.checked
+                );
+
+            const editId =
+                editIdInput
+                    ?.value;
+
+
+            if (
+                !title ||
+                !content
+            ) {
+                return;
+            }
+
+
+            const notes =
+                loadNotes();
+
+            const now =
+                new Date().toISOString();
+
+
+            /*
+             * Edit existing note.
+             */
+            if (editId) {
+
+                const updatedNotes =
+                    notes.map(note => {
+
+                        if (
+                            String(note.id) ===
+                            String(editId)
+                        ) {
+
+                            return {
+                                ...note,
+                                title,
+                                content,
+                                pinned,
+                                updatedAt: now
+                            };
+                        }
+
+
+                        return note;
+
+                    });
+
+
+                saveNotes(
+                    updatedNotes
+                );
+
+            } else {
+
+                /*
+                 * Create new note.
+                 */
+                const newNote = {
+
+                    id: Date.now(),
+
+                    title,
+
+                    content,
+
+                    pinned,
+
+                    createdAt: now,
+
+                    updatedAt: now
+
+                };
+
+
+                notes.push(
+                    newNote
+                );
+
+
+                saveNotes(
+                    notes
+                );
+            }
+
+
+            renderNotes(
+                searchInput?.value || ""
+            );
+
+            closeModal();
+
+        }
+    );
+
+
+    /*
+     * Search notes.
+     */
+    searchInput?.addEventListener(
+        "input",
+        event => {
+
+            renderNotes(
+                event.target.value
+            );
+
+        }
+    );
+
+
+    /*
+     * Edit / delete events.
+     */
+    notesGrid?.addEventListener(
+        "click",
+        event => {
+
+            const editButton =
+                event.target.closest(
+                    '[data-action="edit-note"]'
+                );
+
+            const deleteButton =
+                event.target.closest(
+                    '[data-action="delete-note"]'
+                );
+
+
+            /*
+             * Edit.
+             */
+            if (editButton) {
+
+                const noteId =
+                    editButton.dataset.noteId;
+
+                const notes =
+                    loadNotes();
+
+                const note =
+                    notes.find(
+                        item =>
+                            String(item.id) ===
+                            String(noteId)
+                    );
+
+
+                if (note) {
+                    openEditModal(
+                        note
+                    );
+                }
+
+
+                return;
+            }
+
+
+            /*
+             * Delete.
+             */
+            if (deleteButton) {
+
+                const noteId =
+                    deleteButton.dataset.noteId;
+
+                const notes =
+                    loadNotes();
+
+                const updatedNotes =
+                    notes.filter(
+                        note =>
+                            String(note.id) !==
+                            String(noteId)
+                    );
+
+
+                saveNotes(
+                    updatedNotes
+                );
+
+
+                renderNotes(
+                    searchInput?.value || ""
+                );
+            }
+
+        }
+    );
+
+
+    renderNotes();
+}
 document.addEventListener("DOMContentLoaded", () => {
 
     console.log("DailyOS Initialized.");
@@ -2018,6 +2665,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initializePlanner();
     initializeStudyTracker();
     initializePomodoro();
+    initializeNotes();
     initializeCalendar();
 
 });
