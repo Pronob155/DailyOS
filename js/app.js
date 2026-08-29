@@ -13,7 +13,9 @@ import {
     saveTasks,
     loadTasks,
     saveStudySessions,
-    loadStudySessions
+    loadStudySessions,
+    saveNotes,
+    loadNotes
 } from "./storage.js";
 
 /* ==========================
