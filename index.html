@@ -1086,6 +1086,188 @@
                     </div>
 
                 </section>
+                <!-- ==========================Goals========================== -->
+
+                <section class="goals-section">
+
+                    <div class="goals-header">
+
+                        <div>
+
+                            <p class="section-label">
+                                PERSONAL GROWTH
+                            </p>
+
+                            <h2>
+                                Goals
+                            </h2>
+
+                            <p class="section-description">
+                                Set meaningful goals and track your progress.
+                            </p>
+
+                        </div>
+
+                        <button type="button" class="goals-add-button" id="goals-add-button">
+
+                            <i class="fa-solid fa-plus"></i>
+
+                            <span>Add Goal</span>
+
+                        </button>
+
+                    </div>
+
+
+                    <!-- Goals Grid -->
+
+                    <div class="goals-grid" id="goals-grid">
+                    </div>
+
+
+                    <!-- Goal Modal -->
+
+                    <div class="goals-modal" id="goals-modal" hidden>
+
+                        <div class="goals-modal-overlay"></div>
+
+
+                        <div class="goals-modal-content" role="dialog" aria-modal="true"
+                            aria-labelledby="goals-modal-title">
+
+                            <div class="goals-modal-header">
+
+                                <div>
+
+                                    <p class="section-label">
+                                        PERSONAL GROWTH
+                                    </p>
+
+                                    <h2 id="goals-modal-title">
+                                        Add Goal
+                                    </h2>
+
+                                </div>
+
+
+                                <button type="button" class="goals-modal-close" id="goals-modal-close"
+                                    aria-label="Close">
+
+                                    <i class="fa-solid fa-xmark"></i>
+
+                                </button>
+
+                            </div>
+
+
+                            <form id="goals-form">
+
+                                <input type="hidden" id="goals-edit-id">
+
+
+                                <!-- Goal Title -->
+
+                                <div class="form-group">
+
+                                    <label for="goal-title">
+                                        Goal
+                                    </label>
+
+                                    <input type="text" id="goal-title" placeholder="e.g. Learn Data Structures"
+                                        required>
+
+                                </div>
+
+
+                                <!-- Category -->
+
+                                <div class="form-group">
+
+                                    <label for="goal-category">
+                                        Category
+                                    </label>
+
+                                    <select id="goal-category">
+
+                                        <option value="Personal">
+                                            Personal
+                                        </option>
+
+                                        <option value="Study">
+                                            Study
+                                        </option>
+
+                                        <option value="Career">
+                                            Career
+                                        </option>
+
+                                        <option value="Health">
+                                            Health
+                                        </option>
+
+                                        <option value="Other">
+                                            Other
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                <!-- Progress -->
+
+                                <div class="form-group">
+
+                                    <label for="goal-progress">
+                                        Progress (%)
+                                    </label>
+
+                                    <input type="number" id="goal-progress" min="0" max="100" value="0" required>
+
+                                </div>
+
+
+                                <!-- Target Date -->
+
+                                <div class="form-group">
+
+                                    <label for="goal-target-date">
+                                        Target Date
+                                    </label>
+
+                                    <input type="date" id="goal-target-date">
+
+                                </div>
+
+
+                                <!-- Form Actions -->
+
+                                <div class="goals-form-actions">
+
+                                    <button type="button" class="goals-cancel-button" id="goals-cancel-button">
+
+                                        Cancel
+
+                                    </button>
+
+
+                                    <button type="submit" class="goals-save-button">
+
+                                        <i class="fa-solid fa-bullseye"></i>
+
+                                        <span>Save Goal</span>
+
+                                    </button>
+
+                                </div>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </section>
                 <!-- ==========================Calendar========================== -->
 
                 <section class="calendar-section">
