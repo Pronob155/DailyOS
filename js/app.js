@@ -15,7 +15,9 @@ import {
     saveStudySessions,
     loadStudySessions,
     saveNotes,
-    loadNotes
+    loadNotes,
+    saveGoals,
+    loadGoals
 } from "./storage.js";
 
 /* ==========================
@@ -2654,6 +2656,610 @@ function initializeNotes() {
 
     renderNotes();
 }
+/* ==========================
+   Goals
+========================== */
+
+
+/**
+ * Formats a goal target date.
+ *
+ * @param {string} dateString
+ * @returns {string}
+ */
+function formatGoalDate(dateString) {
+
+    if (!dateString) {
+        return "No target date";
+    }
+
+
+    const date =
+        new Date(
+            `${dateString}T00:00:00`
+        );
+
+
+    return date.toLocaleDateString(
+        "en-US",
+        {
+            day: "numeric",
+            month: "short",
+            year: "numeric"
+        }
+    );
+}
+
+
+/**
+ * Escapes goal text before rendering.
+ *
+ * @param {string} value
+ * @returns {string}
+ */
+function escapeGoalHTML(value) {
+
+    const element =
+        document.createElement("div");
+
+    element.textContent = value;
+
+    return element.innerHTML;
+}
+
+
+/**
+ * Renders all goals.
+ */
+function renderGoals() {
+
+    const goalsGrid =
+        document.getElementById(
+            "goals-grid"
+        );
+
+    if (!goalsGrid) {
+        return;
+    }
+
+
+    const goals =
+        loadGoals();
+
+
+    goalsGrid.innerHTML = "";
+
+
+    if (goals.length === 0) {
+
+        goalsGrid.innerHTML = `
+
+            <div class="goals-empty">
+
+                <i class="fa-solid fa-bullseye"></i>
+
+                <p>
+                    No goals yet. Set your first goal.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    goals.forEach(goal => {
+
+        const progress =
+            Math.min(
+                100,
+                Math.max(
+                    0,
+                    Number(goal.progress) || 0
+                )
+            );
+
+
+        const goalCard =
+            document.createElement(
+                "article"
+            );
+
+        goalCard.className =
+            "goal-card";
+
+
+        goalCard.innerHTML = `
+
+            <div class="goal-card-header">
+
+                <div>
+
+                    <h3 class="goal-card-title">
+
+                        ${escapeGoalHTML(
+                            goal.title
+                        )}
+
+                    </h3>
+
+
+                    <span class="goal-category">
+
+                        ${escapeGoalHTML(
+                            goal.category
+                        )}
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- Progress -->
+
+            <div class="goal-progress-header">
+
+                <span>
+                    Progress
+                </span>
+
+                <strong>
+                    ${progress}%
+                </strong>
+
+            </div>
+
+
+            <div class="goal-progress-track">
+
+                <div
+                    class="goal-progress-bar"
+                    style="width: ${progress}%">
+                </div>
+
+            </div>
+
+
+            <!-- Footer -->
+
+            <div class="goal-card-footer">
+
+                <span class="goal-target-date">
+
+                    <i class="fa-solid fa-calendar"></i>
+
+                    ${formatGoalDate(
+                        goal.targetDate
+                    )}
+
+                </span>
+
+
+                <div class="goal-actions">
+
+                    <button
+                        type="button"
+                        class="goal-action-button"
+                        data-action="edit-goal"
+                        data-goal-id="${goal.id}"
+                        aria-label="Edit goal">
+
+                        <i class="fa-solid fa-pen"></i>
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="goal-action-button delete"
+                        data-action="delete-goal"
+                        data-goal-id="${goal.id}"
+                        aria-label="Delete goal">
+
+                        <i class="fa-solid fa-trash"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        `;
+
+
+        goalsGrid.appendChild(
+            goalCard
+        );
+
+    });
+}
+
+
+/**
+ * Initializes Goals feature.
+ */
+function initializeGoals() {
+
+    const addButton =
+        document.getElementById(
+            "goals-add-button"
+        );
+
+    const modal =
+        document.getElementById(
+            "goals-modal"
+        );
+
+    const closeButton =
+        document.getElementById(
+            "goals-modal-close"
+        );
+
+    const cancelButton =
+        document.getElementById(
+            "goals-cancel-button"
+        );
+
+    const overlay =
+        modal?.querySelector(
+            ".goals-modal-overlay"
+        );
+
+    const form =
+        document.getElementById(
+            "goals-form"
+        );
+
+    const goalsGrid =
+        document.getElementById(
+            "goals-grid"
+        );
+
+    const editIdInput =
+        document.getElementById(
+            "goals-edit-id"
+        );
+
+    const titleInput =
+        document.getElementById(
+            "goal-title"
+        );
+
+    const categoryInput =
+        document.getElementById(
+            "goal-category"
+        );
+
+    const progressInput =
+        document.getElementById(
+            "goal-progress"
+        );
+
+    const targetDateInput =
+        document.getElementById(
+            "goal-target-date"
+        );
+
+    const modalTitle =
+        document.getElementById(
+            "goals-modal-title"
+        );
+
+
+    /**
+     * Opens modal for a new goal.
+     */
+    function openAddModal() {
+
+        form?.reset();
+
+
+        if (editIdInput) {
+            editIdInput.value = "";
+        }
+
+        if (progressInput) {
+            progressInput.value = 0;
+        }
+
+        if (modalTitle) {
+            modalTitle.textContent =
+                "Add Goal";
+        }
+
+        if (modal) {
+            modal.hidden = false;
+        }
+
+        titleInput?.focus();
+    }
+
+
+    /**
+     * Opens modal for editing.
+     *
+     * @param {Object} goal
+     */
+    function openEditModal(goal) {
+
+        if (
+            !editIdInput ||
+            !titleInput ||
+            !categoryInput ||
+            !progressInput ||
+            !targetDateInput
+        ) {
+            return;
+        }
+
+
+        editIdInput.value =
+            goal.id;
+
+        titleInput.value =
+            goal.title;
+
+        categoryInput.value =
+            goal.category;
+
+        progressInput.value =
+            goal.progress;
+
+        targetDateInput.value =
+            goal.targetDate || "";
+
+
+        if (modalTitle) {
+            modalTitle.textContent =
+                "Edit Goal";
+        }
+
+        if (modal) {
+            modal.hidden = false;
+        }
+
+        titleInput.focus();
+    }
+
+
+    /**
+     * Closes the goal modal.
+     */
+    function closeModal() {
+
+        if (modal) {
+            modal.hidden = true;
+        }
+
+        form?.reset();
+    }
+
+
+    addButton?.addEventListener(
+        "click",
+        openAddModal
+    );
+
+
+    closeButton?.addEventListener(
+        "click",
+        closeModal
+    );
+
+
+    cancelButton?.addEventListener(
+        "click",
+        closeModal
+    );
+
+
+    overlay?.addEventListener(
+        "click",
+        closeModal
+    );
+
+
+    /*
+     * Create or update goal.
+     */
+    form?.addEventListener(
+        "submit",
+        event => {
+
+            event.preventDefault();
+
+
+            const title =
+                titleInput
+                    ?.value
+                    .trim();
+
+            const category =
+                categoryInput
+                    ?.value;
+
+            const progress =
+                Math.min(
+                    100,
+                    Math.max(
+                        0,
+                        Number(
+                            progressInput?.value
+                        ) || 0
+                    )
+                );
+
+            const targetDate =
+                targetDateInput
+                    ?.value || "";
+
+            const editId =
+                editIdInput
+                    ?.value;
+
+
+            if (!title) {
+                return;
+            }
+
+
+            const goals =
+                loadGoals();
+
+
+            if (editId) {
+
+                const updatedGoals =
+                    goals.map(goal => {
+
+                        if (
+                            String(goal.id) ===
+                            String(editId)
+                        ) {
+
+                            return {
+                                ...goal,
+                                title,
+                                category,
+                                progress,
+                                targetDate,
+                                updatedAt:
+                                    new Date()
+                                        .toISOString()
+                            };
+                        }
+
+
+                        return goal;
+
+                    });
+
+
+                saveGoals(
+                    updatedGoals
+                );
+
+            } else {
+
+                const now =
+                    new Date()
+                        .toISOString();
+
+
+                const newGoal = {
+
+                    id: Date.now(),
+
+                    title,
+
+                    category,
+
+                    progress,
+
+                    targetDate,
+
+                    createdAt: now,
+
+                    updatedAt: now
+
+                };
+
+
+                goals.push(
+                    newGoal
+                );
+
+
+                saveGoals(
+                    goals
+                );
+            }
+
+
+            renderGoals();
+
+            closeModal();
+
+        }
+    );
+
+
+    /*
+     * Edit and delete goal.
+     */
+    goalsGrid?.addEventListener(
+        "click",
+        event => {
+
+            const editButton =
+                event.target.closest(
+                    '[data-action="edit-goal"]'
+                );
+
+            const deleteButton =
+                event.target.closest(
+                    '[data-action="delete-goal"]'
+                );
+
+
+            if (editButton) {
+
+                const goalId =
+                    editButton.dataset.goalId;
+
+                const goals =
+                    loadGoals();
+
+                const goal =
+                    goals.find(
+                        item =>
+                            String(item.id) ===
+                            String(goalId)
+                    );
+
+
+                if (goal) {
+                    openEditModal(goal);
+                }
+
+                return;
+            }
+
+
+            if (deleteButton) {
+
+                const goalId =
+                    deleteButton.dataset.goalId;
+
+                const goals =
+                    loadGoals();
+
+                const updatedGoals =
+                    goals.filter(
+                        goal =>
+                            String(goal.id) !==
+                            String(goalId)
+                    );
+
+
+                saveGoals(
+                    updatedGoals
+                );
+
+                renderGoals();
+
+            }
+
+        }
+    );
+
+
+    renderGoals();
+}
 document.addEventListener("DOMContentLoaded", () => {
 
     console.log("DailyOS Initialized.");
@@ -2666,6 +3272,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initializeStudyTracker();
     initializePomodoro();
     initializeNotes();
+    initializeGoals();
     initializeCalendar();
 
 });
