@@ -2327,3 +2327,457 @@ body {
     }
 
 }
+/* ==========================
+   Goals
+========================== */
+
+.goals-section {
+    margin-top: 24px;
+
+    background: var(--surface);
+
+    border-radius: var(--border-radius);
+
+    padding: 28px;
+
+    box-shadow: var(--shadow);
+}
+
+
+/* ==========================
+   Header
+========================== */
+
+.goals-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 20px;
+
+    margin-bottom: 24px;
+}
+
+.goals-add-button {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 10px 16px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: var(--primary);
+
+    color: #ffffff;
+
+    font: inherit;
+
+    font-size: 0.8rem;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: var(--transition);
+}
+
+.goals-add-button:hover {
+    background: var(--primary-hover);
+
+    transform: translateY(-1px);
+}
+
+
+/* ==========================
+   Goals Grid
+========================== */
+
+.goals-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fill, minmax(280px, 1fr));
+
+    gap: 16px;
+}
+
+
+/* ==========================
+   Goal Card
+========================== */
+
+.goal-card {
+    display: flex;
+
+    flex-direction: column;
+
+    padding: 20px;
+
+    background: var(--bg);
+
+    border: 1px solid var(--surface-light);
+
+    border-radius: 14px;
+
+    transition: var(--transition);
+}
+
+.goal-card:hover {
+    transform: translateY(-2px);
+
+    border-color: var(--primary);
+}
+
+.goal-card-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 12px;
+
+    margin-bottom: 16px;
+}
+
+.goal-card-title {
+    font-size: 1rem;
+
+    line-height: 1.4;
+
+    word-break: break-word;
+}
+
+.goal-category {
+    display: inline-flex;
+
+    margin-top: 6px;
+
+    padding: 4px 8px;
+
+    border-radius: 999px;
+
+    background: var(--surface-light);
+
+    color: var(--text-light);
+
+    font-size: 0.7rem;
+
+    font-weight: 600;
+}
+
+
+/* ==========================
+   Progress
+========================== */
+
+.goal-progress-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 8px;
+
+    color: var(--text-light);
+
+    font-size: 0.75rem;
+}
+
+.goal-progress-header strong {
+    color: var(--text);
+
+    font-size: 0.8rem;
+}
+
+.goal-progress-track {
+    width: 100%;
+
+    height: 8px;
+
+    overflow: hidden;
+
+    margin-bottom: 18px;
+
+    background: var(--surface-light);
+
+    border-radius: 999px;
+}
+
+.goal-progress-bar {
+    height: 100%;
+
+    background: var(--primary);
+
+    border-radius: inherit;
+
+    transition: width 0.3s ease;
+}
+
+
+/* ==========================
+   Footer
+========================== */
+
+.goal-card-footer {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 12px;
+
+    padding-top: 14px;
+
+    border-top: 1px solid var(--surface-light);
+}
+
+.goal-target-date {
+    color: var(--text-light);
+
+    font-size: 0.7rem;
+}
+
+.goal-actions {
+    display: flex;
+
+    gap: 4px;
+}
+
+.goal-action-button {
+    width: 32px;
+
+    height: 32px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border: none;
+
+    border-radius: 7px;
+
+    background: transparent;
+
+    color: var(--text-light);
+
+    cursor: pointer;
+
+    transition: var(--transition);
+}
+
+.goal-action-button:hover {
+    background: var(--surface-light);
+
+    color: var(--text);
+}
+
+.goal-action-button.delete:hover {
+    background: rgba(239, 68, 68, 0.12);
+
+    color: var(--danger);
+}
+
+
+/* ==========================
+   Empty State
+========================== */
+
+.goals-empty {
+    grid-column: 1 / -1;
+
+    padding: 50px 20px;
+
+    text-align: center;
+
+    border: 1px dashed var(--surface-light);
+
+    border-radius: 12px;
+
+    color: var(--text-light);
+}
+
+.goals-empty i {
+    display: block;
+
+    margin-bottom: 12px;
+
+    font-size: 1.8rem;
+}
+
+
+/* ==========================
+   Goals Modal
+========================== */
+
+.goals-modal {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 1000;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+}
+
+.goals-modal[hidden] {
+    display: none;
+}
+
+.goals-modal-overlay {
+    position: absolute;
+
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.65);
+}
+
+.goals-modal-content {
+    position: relative;
+
+    width: 100%;
+
+    max-width: 520px;
+
+    max-height: calc(100vh - 40px);
+
+    overflow-y: auto;
+
+    padding: 28px;
+
+    background: var(--surface);
+
+    border-radius: var(--border-radius);
+
+    box-shadow: var(--shadow);
+}
+
+.goals-modal-header {
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    margin-bottom: 24px;
+}
+
+.goals-modal-header h2 {
+    font-size: 1.2rem;
+}
+
+.goals-modal-close {
+    width: 34px;
+
+    height: 34px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: transparent;
+
+    color: var(--text-light);
+
+    cursor: pointer;
+}
+
+.goals-modal-close:hover {
+    background: var(--surface-light);
+
+    color: var(--text);
+}
+
+
+/* ==========================
+   Form
+========================== */
+
+.goals-form-actions {
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    margin-top: 24px;
+}
+
+.goals-cancel-button,
+.goals-save-button {
+    padding: 10px 16px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    font: inherit;
+
+    font-size: 0.8rem;
+
+    cursor: pointer;
+}
+
+.goals-cancel-button {
+    background: var(--surface-light);
+
+    color: var(--text);
+}
+
+.goals-save-button {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    background: var(--primary);
+
+    color: #ffffff;
+
+    font-weight: 600;
+}
+
+
+/* ==========================
+   Responsive
+========================== */
+
+@media (max-width: 600px) {
+
+    .goals-section {
+        padding: 20px;
+    }
+
+    .goals-header {
+        flex-direction: column;
+    }
+
+    .goals-add-button {
+        width: 100%;
+
+        justify-content: center;
+    }
+
+    .goals-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
