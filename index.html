@@ -1268,6 +1268,427 @@
                     </div>
 
                 </section>
+                <!-- ==========================
+     Productivity Statistics
+========================== -->
+
+                <section class="statistics-section">
+
+                    <div class="statistics-header">
+
+                        <div>
+
+                            <p class="section-label">
+                                INSIGHTS
+                            </p>
+
+                            <h2>
+                                Productivity Statistics
+                            </h2>
+
+                            <p class="section-description">
+                                Understand your productivity and track your progress.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Statistics Summary -->
+
+                    <div class="statistics-summary-grid">
+
+                        <article class="statistics-summary-card">
+
+                            <div class="statistics-card-icon">
+
+                                <i class="fa-solid fa-list-check"></i>
+
+                            </div>
+
+                            <div>
+
+                                <span>
+                                    Task Completion
+                                </span>
+
+                                <strong id="statistics-task-rate">
+
+                                    0%
+
+                                </strong>
+
+                            </div>
+
+                        </article>
+
+
+                        <article class="statistics-summary-card">
+
+                            <div class="statistics-card-icon">
+
+                                <i class="fa-solid fa-clock"></i>
+
+                            </div>
+
+                            <div>
+
+                                <span>
+                                    Study Time
+                                </span>
+
+                                <strong id="statistics-study-time">
+
+                                    0h
+
+                                </strong>
+
+                            </div>
+
+                        </article>
+
+
+                        <article class="statistics-summary-card">
+
+                            <div class="statistics-card-icon">
+
+                                <i class="fa-solid fa-bullseye"></i>
+
+                            </div>
+
+                            <div>
+
+                                <span>
+                                    Average Goal Progress
+                                </span>
+
+                                <strong id="statistics-goal-progress">
+
+                                    0%
+
+                                </strong>
+
+                            </div>
+
+                        </article>
+
+
+                        <article class="statistics-summary-card">
+
+                            <div class="statistics-card-icon">
+
+                                <i class="fa-solid fa-fire"></i>
+
+                            </div>
+
+                            <div>
+
+                                <span>
+                                    Focus Sessions
+                                </span>
+
+                                <strong id="statistics-focus-sessions">
+
+                                    0
+
+                                </strong>
+
+                            </div>
+
+                        </article>
+
+                    </div>
+
+
+                    <!-- Detailed Statistics -->
+
+                    <div class="statistics-details-grid">
+
+
+                        <!-- Task Statistics -->
+
+                        <article class="statistics-detail-card">
+
+                            <div class="statistics-detail-header">
+
+                                <div>
+
+                                    <h3>
+                                        Tasks
+                                    </h3>
+
+                                    <p>
+                                        Your task completion overview.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="statistics-metrics">
+
+                                <div>
+
+                                    <span>
+                                        Total
+                                    </span>
+
+                                    <strong id="statistics-total-tasks">
+
+                                        0
+
+                                    </strong>
+
+                                </div>
+
+
+                                <div>
+
+                                    <span>
+                                        Completed
+                                    </span>
+
+                                    <strong id="statistics-completed-tasks">
+
+                                        0
+
+                                    </strong>
+
+                                </div>
+
+
+                                <div>
+
+                                    <span>
+                                        Pending
+                                    </span>
+
+                                    <strong id="statistics-pending-tasks">
+
+                                        0
+
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="statistics-chart">
+
+                                <canvas id="task-statistics-chart">
+                                </canvas>
+
+                            </div>
+
+                        </article>
+
+
+                        <!-- Goals Statistics -->
+
+                        <article class="statistics-detail-card">
+
+                            <div class="statistics-detail-header">
+
+                                <div>
+
+                                    <h3>
+                                        Goals
+                                    </h3>
+
+                                    <p>
+                                        Track progress across your goals.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="statistics-metrics">
+
+                                <div>
+
+                                    <span>
+                                        Total Goals
+                                    </span>
+
+                                    <strong id="statistics-total-goals">
+
+                                        0
+
+                                    </strong>
+
+                                </div>
+
+
+                                <div>
+
+                                    <span>
+                                        Completed
+                                    </span>
+
+                                    <strong id="statistics-completed-goals">
+
+                                        0
+
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="statistics-chart">
+
+                                <canvas id="goal-statistics-chart">
+                                </canvas>
+
+                            </div>
+
+                        </article>
+
+
+                        <!-- Study Statistics -->
+
+                        <article class="statistics-detail-card">
+
+                            <div class="statistics-detail-header">
+
+                                <div>
+
+                                    <h3>
+                                        Study
+                                    </h3>
+
+                                    <p>
+                                        Your recorded study activity.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="statistics-metrics">
+
+                                <div>
+
+                                    <span>
+                                        Sessions
+                                    </span>
+
+                                    <strong id="statistics-study-sessions">
+
+                                        0
+
+                                    </strong>
+
+                                </div>
+
+
+                                <div>
+
+                                    <span>
+                                        Total Minutes
+                                    </span>
+
+                                    <strong id="statistics-study-minutes">
+
+                                        0
+
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="statistics-study-info">
+
+                                <i class="fa-solid fa-graduation-cap"></i>
+
+                                <p>
+                                    Keep tracking your study sessions to build better insights.
+                                </p>
+
+                            </div>
+
+                        </article>
+
+
+                        <!-- Pomodoro Statistics -->
+
+                        <article class="statistics-detail-card">
+
+                            <div class="statistics-detail-header">
+
+                                <div>
+
+                                    <h3>
+                                        Pomodoro
+                                    </h3>
+
+                                    <p>
+                                        Your focus and break sessions.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="statistics-metrics">
+
+                                <div>
+
+                                    <span>
+                                        Focus
+                                    </span>
+
+                                    <strong id="statistics-pomodoro-focus">
+
+                                        0
+
+                                    </strong>
+
+                                </div>
+
+
+                                <div>
+
+                                    <span>
+                                        Breaks
+                                    </span>
+
+                                    <strong id="statistics-pomodoro-breaks">
+
+                                        0
+
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="statistics-study-info">
+
+                                <i class="fa-solid fa-stopwatch"></i>
+
+                                <p>
+                                    Complete focus sessions to improve your consistency.
+                                </p>
+
+                            </div>
+
+                        </article>
+
+                    </div>
+
+                </section>
                 <!-- ==========================Calendar========================== -->
 
                 <section class="calendar-section">
@@ -1346,6 +1767,9 @@
         </div>
 
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="js/app.js">
+    </script>
 
     <script type="module" src="js/app.js"></script>
 
