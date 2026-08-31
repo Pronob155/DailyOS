@@ -13,7 +13,9 @@
 const STORAGE_KEYS = {
     tasks: "dailyos_tasks",
     studySessions: "dailyos_study_sessions",
-    notes: "dailyos_notes"
+    notes: "dailyos_notes",
+    goals: "dailyos_goals",
+    pomodoroStats: "dailyos_pomodoro_stats"
 };
 /* ==========================
    Study Session Storage
@@ -112,6 +114,113 @@ function loadNotes() {
     }
 }
 /* ==========================
+   Goals Storage
+========================== */
+
+/**
+ * Save goals to Local Storage.
+ *
+ * @param {Array} goals
+ */
+function saveGoals(goals) {
+
+    localStorage.setItem(
+        STORAGE_KEYS.goals,
+        JSON.stringify(goals)
+    );
+}
+
+
+/**
+ * Load goals from Local Storage.
+ *
+ * @returns {Array}
+ */
+function loadGoals() {
+
+    const storedGoals =
+        localStorage.getItem(
+            STORAGE_KEYS.goals
+        );
+
+    if (!storedGoals) {
+        return [];
+    }
+
+    try {
+
+        return JSON.parse(
+            storedGoals
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Failed to load goals:",
+            error
+        );
+
+        return [];
+    }
+}
+/* ==========================
+   Pomodoro Statistics Storage
+========================== */
+
+/**
+ * Save Pomodoro statistics.
+ *
+ * @param {Object} stats
+ */
+function savePomodoroStats(stats) {
+
+    localStorage.setItem(
+        STORAGE_KEYS.pomodoroStats,
+        JSON.stringify(stats)
+    );
+}
+
+
+/**
+ * Load Pomodoro statistics.
+ *
+ * @returns {Object}
+ */
+function loadPomodoroStats() {
+
+    const storedStats =
+        localStorage.getItem(
+            STORAGE_KEYS.pomodoroStats
+        );
+
+    if (!storedStats) {
+
+        return {
+            focusSessions: 0,
+            breakSessions: 0
+        };
+    }
+
+    try {
+
+        return JSON.parse(
+            storedStats
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Failed to load Pomodoro stats:",
+            error
+        );
+
+        return {
+            focusSessions: 0,
+            breakSessions: 0
+        };
+    }
+}
+/* ==========================
    Task Storage
 ========================== */
 
@@ -164,5 +273,9 @@ export {
     saveStudySessions,
     loadStudySessions,
     saveNotes,
-    loadNotes
+    loadNotes,
+    saveGoals,
+    loadGoals,
+    savePomodoroStats,
+    loadPomodoroStats
 };
