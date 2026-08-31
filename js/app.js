@@ -17,7 +17,9 @@ import {
     saveNotes,
     loadNotes,
     saveGoals,
-    loadGoals
+    loadGoals,
+    savePomodoroStats,
+    loadPomodoroStats
 } from "./storage.js";
 
 /* ==========================
@@ -1647,9 +1649,14 @@ let pomodoroTimerId = null;
 
 let pomodoroIsRunning = false;
 
-let pomodoroFocusCount = 0;
+const pomodoroStats =
+    loadPomodoroStats();
 
-let pomodoroBreakCount = 0;
+let pomodoroFocusCount =
+    pomodoroStats.focusSessions;
+
+let pomodoroBreakCount =
+    pomodoroStats.breakSessions;
 
 
 /**
@@ -1921,6 +1928,16 @@ function completePomodoroSession() {
 
         pomodoroFocusCount++;
 
+        // Save updated statistics
+        savePomodoroStats({
+            focusSessions:
+                pomodoroFocusCount,
+
+            breakSessions:
+                pomodoroBreakCount
+        });
+
+
         setPomodoroMode(
             "short-break"
         );
@@ -1928,6 +1945,16 @@ function completePomodoroSession() {
     } else {
 
         pomodoroBreakCount++;
+
+        // Save updated statistics
+        savePomodoroStats({
+            focusSessions:
+                pomodoroFocusCount,
+
+            breakSessions:
+                pomodoroBreakCount
+        });
+
 
         setPomodoroMode(
             "focus"
@@ -3260,6 +3287,543 @@ function initializeGoals() {
 
     renderGoals();
 }
+/* ==========================
+   Productivity Statistics
+========================== */
+
+
+let taskStatisticsChart = null;
+
+let goalStatisticsChart = null;
+
+
+/**
+ * Formats total minutes.
+ *
+ * @param {number} minutes
+ * @returns {string}
+ */
+function formatStatisticsStudyTime(minutes) {
+
+    if (minutes < 60) {
+        return `${minutes}m`;
+    }
+
+
+    const hours =
+        Math.floor(minutes / 60);
+
+    const remainingMinutes =
+        minutes % 60;
+
+
+    if (remainingMinutes === 0) {
+        return `${hours}h`;
+    }
+
+
+    return `${hours}h ${remainingMinutes}m`;
+}
+
+
+/**
+ * Calculates productivity statistics.
+ *
+ * @returns {Object}
+ */
+function getProductivityStatistics() {
+
+    const tasks =
+        loadTasks();
+
+    const studySessions =
+        loadStudySessions();
+
+    const goals =
+        loadGoals();
+
+    const pomodoroStats =
+        loadPomodoroStats();
+
+
+    /*
+     * Tasks
+     */
+    const totalTasks =
+        tasks.length;
+
+    const completedTasks =
+        tasks.filter(
+            task => task.completed
+        ).length;
+
+    const pendingTasks =
+        totalTasks -
+        completedTasks;
+
+    const taskCompletionRate =
+        totalTasks === 0
+            ? 0
+            : Math.round(
+                (
+                    completedTasks /
+                    totalTasks
+                ) * 100
+            );
+
+
+    /*
+     * Study
+     */
+    const totalStudySessions =
+        studySessions.length;
+
+    const totalStudyMinutes =
+        studySessions.reduce(
+            (total, session) =>
+                total +
+                (
+                    Number(
+                        session.duration
+                    ) || 0
+                ),
+            0
+        );
+
+
+    /*
+     * Goals
+     */
+    const totalGoals =
+        goals.length;
+
+    const completedGoals =
+        goals.filter(
+            goal =>
+                Number(
+                    goal.progress
+                ) >= 100
+        ).length;
+
+    const averageGoalProgress =
+        totalGoals === 0
+            ? 0
+            : Math.round(
+                goals.reduce(
+                    (total, goal) =>
+                        total +
+                        (
+                            Number(
+                                goal.progress
+                            ) || 0
+                        ),
+                    0
+                ) /
+                totalGoals
+            );
+
+
+    return {
+
+        tasks: {
+            total: totalTasks,
+            completed: completedTasks,
+            pending: pendingTasks,
+            completionRate:
+                taskCompletionRate
+        },
+
+        study: {
+            sessions:
+                totalStudySessions,
+
+            minutes:
+                totalStudyMinutes
+        },
+
+        goals: {
+            total:
+                totalGoals,
+
+            completed:
+                completedGoals,
+
+            averageProgress:
+                averageGoalProgress
+        },
+
+        pomodoro: {
+            focus:
+                Number(
+                    pomodoroStats.focusSessions
+                ) || 0,
+
+            breaks:
+                Number(
+                    pomodoroStats.breakSessions
+                ) || 0
+        }
+
+    };
+}
+
+
+/**
+ * Updates statistics text values.
+ */
+function updateStatisticsUI(statistics) {
+
+    /*
+     * Summary
+     */
+    document.getElementById(
+        "statistics-task-rate"
+    ).textContent =
+        `${statistics.tasks.completionRate}%`;
+
+    document.getElementById(
+        "statistics-study-time"
+    ).textContent =
+        formatStatisticsStudyTime(
+            statistics.study.minutes
+        );
+
+    document.getElementById(
+        "statistics-goal-progress"
+    ).textContent =
+        `${statistics.goals.averageProgress}%`;
+
+    document.getElementById(
+        "statistics-focus-sessions"
+    ).textContent =
+        statistics.pomodoro.focus;
+
+
+    /*
+     * Tasks
+     */
+    document.getElementById(
+        "statistics-total-tasks"
+    ).textContent =
+        statistics.tasks.total;
+
+    document.getElementById(
+        "statistics-completed-tasks"
+    ).textContent =
+        statistics.tasks.completed;
+
+    document.getElementById(
+        "statistics-pending-tasks"
+    ).textContent =
+        statistics.tasks.pending;
+
+
+    /*
+     * Goals
+     */
+    document.getElementById(
+        "statistics-total-goals"
+    ).textContent =
+        statistics.goals.total;
+
+    document.getElementById(
+        "statistics-completed-goals"
+    ).textContent =
+        statistics.goals.completed;
+
+
+    /*
+     * Study
+     */
+    document.getElementById(
+        "statistics-study-sessions"
+    ).textContent =
+        statistics.study.sessions;
+
+    document.getElementById(
+        "statistics-study-minutes"
+    ).textContent =
+        statistics.study.minutes;
+
+
+    /*
+     * Pomodoro
+     */
+    document.getElementById(
+        "statistics-pomodoro-focus"
+    ).textContent =
+        statistics.pomodoro.focus;
+
+    document.getElementById(
+        "statistics-pomodoro-breaks"
+    ).textContent =
+        statistics.pomodoro.breaks;
+}
+
+
+/**
+ * Renders task completion chart.
+ */
+function renderTaskStatisticsChart(statistics) {
+
+    const canvas =
+        document.getElementById(
+            "task-statistics-chart"
+        );
+
+    if (
+        !canvas ||
+        typeof Chart === "undefined"
+    ) {
+        return;
+    }
+
+
+    if (taskStatisticsChart) {
+
+        taskStatisticsChart.destroy();
+    }
+
+
+    taskStatisticsChart =
+        new Chart(
+            canvas,
+            {
+                type: "doughnut",
+
+                data: {
+
+                    labels: [
+                        "Completed",
+                        "Pending"
+                    ],
+
+                    datasets: [
+                        {
+
+                            data: [
+                                statistics
+                                    .tasks
+                                    .completed,
+
+                                statistics
+                                    .tasks
+                                    .pending
+                            ],
+
+                            backgroundColor: [
+                                "#6366f1",
+                                "#27272a"
+                            ],
+
+                            borderWidth: 0
+
+                        }
+                    ]
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio:
+                        false,
+
+                    plugins: {
+
+                        legend: {
+
+                            position: "bottom",
+
+                            labels: {
+
+                                color: "#a1a1aa",
+
+                                padding: 16,
+
+                                usePointStyle: true
+
+                            }
+
+                        }
+
+                    },
+
+                    cutout: "70%"
+
+                }
+            }
+        );
+}
+
+
+/**
+ * Renders goal progress chart.
+ */
+function renderGoalStatisticsChart() {
+
+    const canvas =
+        document.getElementById(
+            "goal-statistics-chart"
+        );
+
+    if (
+        !canvas ||
+        typeof Chart === "undefined"
+    ) {
+        return;
+    }
+
+
+    if (goalStatisticsChart) {
+
+        goalStatisticsChart.destroy();
+    }
+
+
+    const goals =
+        loadGoals();
+
+
+    goalStatisticsChart =
+        new Chart(
+            canvas,
+            {
+                type: "bar",
+
+                data: {
+
+                    labels:
+                        goals.map(
+                            goal =>
+                                goal.title
+                        ),
+
+                    datasets: [
+                        {
+
+                            label:
+                                "Progress",
+
+                            data:
+                                goals.map(
+                                    goal =>
+                                        Number(
+                                            goal.progress
+                                        ) || 0
+                                ),
+
+                            backgroundColor:
+                                "#6366f1",
+
+                            borderRadius: 6
+
+                        }
+                    ]
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio:
+                        false,
+
+                    scales: {
+
+                        y: {
+
+                            beginAtZero:
+                                true,
+
+                            max: 100,
+
+                            ticks: {
+
+                                color:
+                                    "#a1a1aa",
+
+                                callback:
+                                    value =>
+                                        `${value}%`
+
+                            },
+
+                            grid: {
+
+                                color:
+                                    "rgba(255,255,255,0.05)"
+
+                            }
+
+                        },
+
+                        x: {
+
+                            ticks: {
+
+                                color:
+                                    "#a1a1aa"
+
+                            },
+
+                            grid: {
+
+                                display:
+                                    false
+
+                            }
+
+                        }
+
+                    },
+
+                    plugins: {
+
+                        legend: {
+
+                            display:
+                                false
+
+                        }
+
+                    }
+
+                }
+
+            }
+        );
+}
+
+
+/**
+ * Updates all productivity statistics.
+ */
+function updateProductivityStatistics() {
+
+    const statistics =
+        getProductivityStatistics();
+
+
+    updateStatisticsUI(
+        statistics
+    );
+
+    renderTaskStatisticsChart(
+        statistics
+    );
+
+    renderGoalStatisticsChart();
+}
+
+
+/**
+ * Initializes productivity statistics.
+ */
+function initializeProductivityStatistics() {
+
+    updateProductivityStatistics();
+}
 document.addEventListener("DOMContentLoaded", () => {
 
     console.log("DailyOS Initialized.");
@@ -3273,6 +3837,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initializePomodoro();
     initializeNotes();
     initializeGoals();
+    initializeProductivityStatistics();
     initializeCalendar();
 
 });
