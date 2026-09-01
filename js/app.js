@@ -100,10 +100,9 @@ function toggleTaskCompletion(taskId) {
     task.completed = !task.completed;
 
     saveTasks(tasks);
-
     updateTaskUI(task);
-
     updateDashboardStats();
+    updateProductivityStatistics();
 }
 /**
  * Updates the visual state of a task.
@@ -769,9 +768,9 @@ function renderStudySessions() {
 
                 <p>
                     ${escapeHTML(
-                        session.notes ||
-                        "Study session"
-                    )}
+            session.notes ||
+            "Study session"
+        )}
                 </p>
 
             </div>
@@ -780,8 +779,8 @@ function renderStudySessions() {
             <span class="study-item-duration">
 
                 ${formatStudyDuration(
-                    Number(session.duration)
-                )}
+            Number(session.duration)
+        )}
 
             </span>
 
@@ -959,8 +958,9 @@ function initializeStudyTracker() {
                 sessions
             );
 
-
             renderStudySessions();
+
+            updateProductivityStatistics();
 
             closeModal();
 
@@ -1004,8 +1004,9 @@ function initializeStudyTracker() {
                 updatedSessions
             );
 
-
             renderStudySessions();
+
+            updateProductivityStatistics();
 
         }
     );
@@ -1706,7 +1707,7 @@ function updatePomodoroDisplay() {
 
         const totalDuration =
             POMODORO_DURATIONS[
-                pomodoroMode
+            pomodoroMode
             ];
 
 
@@ -1908,7 +1909,7 @@ function resetPomodoroTimer() {
 
     pomodoroTimeRemaining =
         POMODORO_DURATIONS[
-            pomodoroMode
+        pomodoroMode
         ];
 
 
@@ -1963,8 +1964,8 @@ function completePomodoroSession() {
 
 
     updatePomodoroStats();
-
     updatePomodoroDisplay();
+    updateProductivityStatistics();
 }
 
 
@@ -2176,8 +2177,8 @@ function renderNotes(searchQuery = "") {
 
                 <p>
                     ${normalizedQuery
-                        ? "No notes found."
-                        : "No notes yet. Create your first note."}
+                ? "No notes found."
+                : "No notes yet. Create your first note."}
                 </p>
 
             </div>
@@ -2213,20 +2214,20 @@ function renderNotes(searchQuery = "") {
 
                 <h3>
                     ${escapeNoteHTML(
-                        note.title
-                    )}
+            note.title
+        )}
                 </h3>
 
 
                 ${note.pinned
-                    ? `
+                ? `
                         <i
                             class="fa-solid fa-thumbtack note-pin-icon"
                             aria-label="Pinned note">
                         </i>
                     `
-                    : ""
-                }
+                : ""
+            }
 
             </div>
 
@@ -2234,8 +2235,8 @@ function renderNotes(searchQuery = "") {
             <div class="note-card-content">
 
                 ${escapeNoteHTML(
-                    note.content
-                )}
+                note.content
+            )}
 
             </div>
 
@@ -2245,8 +2246,8 @@ function renderNotes(searchQuery = "") {
                 <span class="note-card-date">
 
                     ${formatNoteDate(
-                        note.updatedAt
-                    )}
+                note.updatedAt
+            )}
 
                 </span>
 
@@ -2807,8 +2808,8 @@ function renderGoals() {
                     <h3 class="goal-card-title">
 
                         ${escapeGoalHTML(
-                            goal.title
-                        )}
+            goal.title
+        )}
 
                     </h3>
 
@@ -2816,8 +2817,8 @@ function renderGoals() {
                     <span class="goal-category">
 
                         ${escapeGoalHTML(
-                            goal.category
-                        )}
+            goal.category
+        )}
 
                     </span>
 
@@ -2860,8 +2861,8 @@ function renderGoals() {
                     <i class="fa-solid fa-calendar"></i>
 
                     ${formatGoalDate(
-                        goal.targetDate
-                    )}
+            goal.targetDate
+        )}
 
                 </span>
 
@@ -3208,13 +3209,11 @@ function initializeGoals() {
 
 
             renderGoals();
-
+            updateProductivityStatistics();
             closeModal();
 
         }
     );
-
-
     /*
      * Edit and delete goal.
      */
@@ -3278,7 +3277,7 @@ function initializeGoals() {
                 );
 
                 renderGoals();
-
+                updateProductivityStatistics();
             }
 
         }
