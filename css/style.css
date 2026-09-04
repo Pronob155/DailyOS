@@ -3,7 +3,24 @@ body {
     background: var(--bg);
     color: var(--text);
 }
-
+body,
+.sidebar,
+.header,
+.dashboard-card,
+.task-section,
+.planner-section,
+.calendar-section,
+.study-section,
+.pomodoro-section,
+.notes-section,
+.goals-section,
+.statistics-section {
+    transition:
+        background-color 0.25s ease,
+        color 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
 /* ==========================
    Layout
 ========================== */
@@ -3031,4 +3048,855 @@ body {
         grid-template-columns: 1fr;
     }
 
+}
+/* ==========================
+   Light Theme
+========================== */
+
+body.light-theme {
+
+    --bg: #f5f7fb;
+
+    --surface: #ffffff;
+
+    --surface-light: #e9edf5;
+
+    --text: #18181b;
+
+    --text-light: #71717a;
+
+    --border: #dfe3eb;
+
+    --primary: #6366f1;
+
+    --primary-hover: #4f46e5;
+
+    --success: #22c55e;
+
+    --danger: #ef4444;
+
+    --warning: #f59e0b;
+
+    --shadow:
+        0 10px 30px
+        rgba(15, 23, 42, 0.08);
+}
+/* ==========================
+   Theme Toggle
+========================== */
+
+.theme-toggle {
+
+    width: 42px;
+
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border: 1px solid var(--surface-light);
+
+    border-radius: 12px;
+
+    background: var(--surface);
+
+    color: var(--text);
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.25s ease,
+        color 0.25s ease,
+        border-color 0.25s ease,
+        transform 0.2s ease;
+
+}
+
+.theme-toggle:hover {
+
+    background: var(--surface-light);
+
+    transform: translateY(-2px);
+
+}
+
+.theme-toggle:active {
+
+    transform: translateY(0);
+
+}
+
+.theme-toggle i {
+
+    font-size: 1rem;
+
+    transition:
+        transform 0.3s ease;
+
+}
+
+.theme-toggle:hover i {
+
+    transform: rotate(15deg);
+
+}
+/* ==========================
+   Responsive Design
+   Phase 17
+========================== */
+
+
+/* ==========================
+   Tablet
+========================== */
+
+@media (max-width: 1024px) {
+
+    .layout {
+
+        grid-template-columns:
+            220px
+            minmax(0, 1fr);
+
+    }
+
+
+    .sidebar {
+
+        padding:
+            20px
+            14px;
+
+    }
+
+
+    .logo {
+
+        font-size:
+            1.2rem;
+
+    }
+
+
+    .nav-item {
+
+        padding:
+            10px
+            12px;
+
+    }
+
+
+    .main-content {
+
+        min-width:
+            0;
+
+    }
+
+
+    .dashboard {
+
+        padding:
+            24px;
+
+    }
+
+
+    .dashboard-cards {
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+    }
+
+
+    .dashboard-secondary {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+}
+
+
+/* ==========================
+   Small Tablet
+========================== */
+
+@media (max-width: 768px) {
+
+    .layout {
+
+        display:
+            block;
+
+    }
+
+
+    .sidebar {
+
+        position:
+            static;
+
+        width:
+            100%;
+
+        min-height:
+            auto;
+
+    }
+
+
+    .sidebar-nav {
+
+        display:
+            flex;
+
+        flex-wrap:
+            wrap;
+
+        gap:
+            6px;
+
+    }
+
+
+    .sidebar-footer {
+
+        margin-top:
+            12px;
+
+    }
+
+
+    .main-content {
+
+        width:
+            100%;
+
+    }
+
+
+    .header {
+
+        padding:
+            16px
+            20px;
+
+    }
+
+
+    .dashboard {
+
+        padding:
+            20px;
+
+    }
+
+
+    .header-right {
+
+        gap:
+            10px;
+
+    }
+
+
+    .header-right input {
+
+        max-width:
+            180px;
+
+    }
+
+
+    .dashboard-cards {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .task-header,
+    .planner-header,
+    .study-header,
+    .notes-header,
+    .goals-header,
+    .calendar-header {
+
+        flex-direction:
+            column;
+
+        align-items:
+            flex-start;
+
+        gap:
+            16px;
+
+    }
+
+
+    .task-actions {
+
+        width:
+            100%;
+
+        flex-wrap:
+            wrap;
+
+    }
+
+
+    .statistics-summary-grid {
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+    }
+
+
+    .statistics-details-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+}
+
+
+/* ==========================
+   Mobile
+========================== */
+
+@media (max-width: 576px) {
+
+    .sidebar {
+
+        padding:
+            16px
+            12px;
+
+    }
+
+
+    .logo {
+
+        margin-bottom:
+            16px;
+
+    }
+
+
+    .sidebar-nav {
+
+        display:
+            grid;
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+    }
+
+
+    .nav-item {
+
+        justify-content:
+            flex-start;
+
+        font-size:
+            0.9rem;
+
+    }
+
+
+    .header {
+
+        padding:
+            14px
+            16px;
+
+        gap:
+            12px;
+
+    }
+
+
+    .page-title {
+
+        font-size:
+            1.3rem;
+
+    }
+
+
+    .header-right input {
+
+        display:
+            none;
+
+    }
+
+
+    .dashboard {
+
+        padding:
+            16px;
+
+    }
+
+
+    .hero {
+
+        padding:
+            24px
+            20px;
+
+    }
+
+
+    .hero h1 {
+
+        font-size:
+            1.8rem;
+
+    }
+
+
+    .hero-date {
+
+        margin-top:
+            12px;
+
+    }
+
+
+    .task-actions {
+
+        flex-direction:
+            column;
+
+        align-items:
+            stretch;
+
+    }
+
+
+    .task-search,
+    .task-filter {
+
+        width:
+            100%;
+
+    }
+
+
+    .task-filter select {
+
+        width:
+            100%;
+
+    }
+
+
+    .add-task {
+
+        flex-direction:
+            column;
+
+    }
+
+
+    .task-input-wrapper,
+    .add-task-button {
+
+        width:
+            100%;
+
+    }
+
+
+    .task-item {
+
+        flex-direction:
+            column;
+
+        align-items:
+            flex-start;
+
+        gap:
+            12px;
+
+    }
+
+
+    .task-item .task-actions {
+
+        width:
+            100%;
+
+        flex-direction:
+            row;
+
+        justify-content:
+            space-between;
+
+        align-items:
+            center;
+
+    }
+
+
+    .planner-form-actions,
+    .study-form-actions,
+    .notes-form-actions,
+    .goals-form-actions {
+
+        flex-direction:
+            column;
+
+    }
+
+
+    .planner-form-actions button,
+    .study-form-actions button,
+    .notes-form-actions button,
+    .goals-form-actions button {
+
+        width:
+            100%;
+
+    }
+
+
+    .statistics-summary-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .calendar-controls {
+
+        width:
+            100%;
+
+        flex-wrap:
+            wrap;
+
+    }
+
+
+    .calendar-grid {
+
+        min-width:
+            560px;
+
+    }
+
+
+    .calendar-section {
+
+        overflow-x:
+            auto;
+
+    }
+
+}
+/* ==========================
+   Phase 17
+   Sidebar & Header Mobile
+========================== */
+
+@media (max-width: 576px) {
+
+    /* Sidebar */
+
+    .sidebar {
+        border-bottom:
+            1px solid var(--border);
+    }
+
+    .sidebar-nav .nav-item,
+    .sidebar-footer .nav-item {
+        min-width: 0;
+    }
+
+    .sidebar-nav .nav-item span,
+    .sidebar-footer .nav-item span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+
+    /* Header */
+
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .header-right {
+        margin-left: auto;
+    }
+
+    .theme-toggle,
+    .avatar {
+        flex-shrink: 0;
+    }
+
+
+    /* Prevent horizontal overflow */
+
+    .main-content,
+    .dashboard {
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+}
+/* ==========================
+   Phase 17
+   Dashboard & Section Grids
+========================== */
+
+/* Tablet */
+
+@media (max-width: 1024px) {
+
+    .dashboard-cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .notes-grid,
+    .goals-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+/* Mobile */
+
+@media (max-width: 576px) {
+
+    /* Dashboard Cards */
+
+    .dashboard-cards {
+        grid-template-columns: 1fr;
+    }
+
+
+    /* Notes */
+
+    .notes-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    /* Goals */
+
+    .goals-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    /* General Section Spacing */
+
+    .task-section,
+    .planner-section,
+    .study-section,
+    .pomodoro-section,
+    .notes-section,
+    .goals-section,
+    .statistics-section,
+    .calendar-section {
+        width: 100%;
+        min-width: 0;
+    }
+
+
+    /* Section Headers */
+
+    .task-header,
+    .planner-header,
+    .study-header,
+    .notes-header,
+    .goals-header,
+    .calendar-header {
+        width: 100%;
+    }
+
+
+    /* Task List */
+
+    .task-list {
+        width: 100%;
+    }
+
+    .task-item {
+        width: 100%;
+    }
+
+
+    /* Statistics */
+
+    .statistics-summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .statistics-details-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    /* Pomodoro */
+
+    .pomodoro-card {
+        width: 100%;
+    }
+
+}
+/* ==========================
+   Phase 17
+   Forms & Modals Responsive
+========================== */
+
+@media (max-width: 768px) {
+
+    .planner-modal-content,
+    .study-modal-content,
+    .notes-modal-content,
+    .goals-modal-content {
+        width: calc(100% - 32px);
+        max-width: 100%;
+        max-height: calc(100vh - 32px);
+        overflow-y: auto;
+    }
+
+    .planner-form,
+    .study-form,
+    .notes-form,
+    .goals-form {
+        width: 100%;
+    }
+
+    .planner-form input,
+    .planner-form select,
+    .planner-form textarea,
+    .study-form input,
+    .study-form select,
+    .study-form textarea,
+    .notes-form input,
+    .notes-form textarea,
+    .goals-form input,
+    .goals-form select,
+    .goals-form textarea {
+        width: 100%;
+        max-width: 100%;
+    }
+}
+
+
+@media (max-width: 576px) {
+
+    .planner-modal-content,
+    .study-modal-content,
+    .notes-modal-content,
+    .goals-modal-content {
+        width: calc(100% - 24px);
+        padding: 20px;
+        border-radius: 12px;
+    }
+
+    .planner-modal-header,
+    .study-modal-header,
+    .notes-modal-header,
+    .goals-modal-header {
+        gap: 12px;
+    }
+
+    .planner-modal-header h2,
+    .study-modal-header h2,
+    .notes-modal-header h2,
+    .goals-modal-header h2 {
+        font-size: 1.1rem;
+    }
+
+    .planner-form-group,
+    .study-form-group,
+    .notes-form-group,
+    .goals-form-group {
+        width: 100%;
+    }
+
+    .planner-form-actions,
+    .study-form-actions,
+    .notes-form-actions,
+    .goals-form-actions {
+        width: 100%;
+        gap: 8px;
+    }
+
+    .planner-form-actions button,
+    .study-form-actions button,
+    .notes-form-actions button,
+    .goals-form-actions button {
+        width: 100%;
+    }
+}
+/* ==========================
+   Phase 17
+   Calendar & Overflow
+========================== */
+
+@media (max-width: 768px) {
+
+    .calendar-section {
+        overflow-x: auto;
+    }
+
+    .calendar-grid {
+        min-width: 600px;
+    }
+
+    .calendar-controls {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .calendar-controls button {
+        flex-shrink: 0;
+    }
+}
+
+
+@media (max-width: 576px) {
+
+    .calendar-section {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .calendar-grid {
+        min-width: 560px;
+    }
+
+    .calendar-controls {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .calendar-controls button {
+        min-width: 40px;
+    }
 }
