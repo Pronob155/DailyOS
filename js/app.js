@@ -10,6 +10,8 @@ Main JavaScript Entry Point
 */
 
 import {
+    saveTheme,
+    loadTheme,
     saveTasks,
     loadTasks,
     saveStudySessions,
@@ -21,7 +23,106 @@ import {
     savePomodoroStats,
     loadPomodoroStats
 } from "./storage.js";
+/* ==========================
+   Theme System
+========================== */
 
+
+/**
+ * Applies the selected theme.
+ *
+ * @param {string} theme
+ */
+function applyTheme(theme) {
+
+    const themeIcon =
+        document.getElementById(
+            "theme-toggle-icon"
+        );
+
+
+    if (theme === "light") {
+
+        document.body.classList.add(
+            "light-theme"
+        );
+
+
+        if (themeIcon) {
+
+            themeIcon.className =
+                "fa-solid fa-sun";
+        }
+
+    } else {
+
+        document.body.classList.remove(
+            "light-theme"
+        );
+
+
+        if (themeIcon) {
+
+            themeIcon.className =
+                "fa-solid fa-moon";
+        }
+    }
+}
+
+
+/**
+ * Initializes theme system.
+ */
+function initializeTheme() {
+
+    const themeToggle =
+        document.getElementById(
+            "theme-toggle"
+        );
+
+    const savedTheme =
+        loadTheme();
+
+
+    // Apply saved theme
+    applyTheme(
+        savedTheme
+    );
+
+
+    if (!themeToggle) {
+        return;
+    }
+
+
+    themeToggle.addEventListener(
+        "click",
+        () => {
+
+            const isLightTheme =
+                document.body.classList.contains(
+                    "light-theme"
+                );
+
+
+            const newTheme =
+                isLightTheme
+                    ? "dark"
+                    : "light";
+
+
+            applyTheme(
+                newTheme
+            );
+
+
+            saveTheme(
+                newTheme
+            );
+
+        }
+    );
+}
 /* ==========================
    Initial Task Data
 ========================== */
@@ -100,9 +201,10 @@ function toggleTaskCompletion(taskId) {
     task.completed = !task.completed;
 
     saveTasks(tasks);
+
     updateTaskUI(task);
+
     updateDashboardStats();
-    updateProductivityStatistics();
 }
 /**
  * Updates the visual state of a task.
@@ -958,9 +1060,8 @@ function initializeStudyTracker() {
                 sessions
             );
 
-            renderStudySessions();
 
-            updateProductivityStatistics();
+            renderStudySessions();
 
             closeModal();
 
@@ -1004,9 +1105,8 @@ function initializeStudyTracker() {
                 updatedSessions
             );
 
-            renderStudySessions();
 
-            updateProductivityStatistics();
+            renderStudySessions();
 
         }
     );
@@ -1964,8 +2064,8 @@ function completePomodoroSession() {
 
 
     updatePomodoroStats();
+
     updatePomodoroDisplay();
-    updateProductivityStatistics();
 }
 
 
@@ -3209,11 +3309,13 @@ function initializeGoals() {
 
 
             renderGoals();
-            updateProductivityStatistics();
+
             closeModal();
 
         }
     );
+
+
     /*
      * Edit and delete goal.
      */
@@ -3277,7 +3379,7 @@ function initializeGoals() {
                 );
 
                 renderGoals();
-                updateProductivityStatistics();
+
             }
 
         }
@@ -3827,6 +3929,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     console.log("DailyOS Initialized.");
 
+    initializeTheme();
     initializeApp();
     initializeTaskEvents();
     syncTaskUI();
