@@ -15,8 +15,28 @@ const STORAGE_KEYS = {
     studySessions: "dailyos_study_sessions",
     notes: "dailyos_notes",
     goals: "dailyos_goals",
-    pomodoroStats: "dailyos_pomodoro_stats"
+    pomodoroStats: "dailyos_pomodoro_stats",
+    theme: "dailyos_theme"
 };
+/* ==========================
+   Theme Storage
+========================== */
+
+function saveTheme(theme) {
+
+    localStorage.setItem(
+        STORAGE_KEYS.theme,
+        theme
+    );
+}
+
+
+function loadTheme() {
+
+    return localStorage.getItem(
+        STORAGE_KEYS.theme
+    ) || "dark";
+}
 /* ==========================
    Study Session Storage
 ========================== */
@@ -268,6 +288,8 @@ function loadTasks() {
     }
 }
 export {
+    saveTheme,
+    loadTheme,
     saveTasks,
     loadTasks,
     saveStudySessions,
