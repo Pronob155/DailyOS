@@ -3900,3 +3900,736 @@ body.light-theme {
         min-width: 40px;
     }
 }
+/* ==========================
+   Phase 18
+   Part 1
+   Overall Spacing & Hierarchy
+========================== */
+
+/* ==========================
+   Dashboard Spacing
+========================== */
+
+.dashboard {
+    gap: 28px;
+}
+
+
+/* ==========================
+   Hero Section
+========================== */
+
+.hero {
+    padding: 32px;
+}
+
+.hero-content {
+    max-width: 720px;
+}
+
+.hero h1 {
+    margin-top: 8px;
+}
+
+.hero-description {
+    margin-top: 10px;
+}
+
+
+/* ==========================
+   Dashboard Cards
+========================== */
+
+.dashboard-cards {
+    gap: 20px;
+}
+
+.dashboard-secondary {
+    gap: 20px;
+}
+
+.dashboard-card {
+    padding: 24px;
+}
+
+
+/* ==========================
+   Card Content Hierarchy
+========================== */
+
+.card-header {
+    margin-bottom: 18px;
+}
+
+.card-value {
+    margin-top: 4px;
+}
+
+.card-description {
+    margin-top: 8px;
+}
+
+
+/* ==========================
+   Section Headers
+========================== */
+
+.task-header,
+.planner-header,
+.study-header,
+.pomodoro-header,
+.notes-header,
+.goals-header,
+.statistics-header,
+.calendar-header {
+    margin-bottom: 24px;
+}
+
+.section-label {
+    margin-bottom: 6px;
+}
+
+.section-description {
+    margin-top: 8px;
+}
+
+
+/* ==========================
+   Section Content
+========================== */
+
+.task-section,
+.planner-section,
+.study-section,
+.pomodoro-section,
+.notes-section,
+.goals-section,
+.statistics-section,
+.calendar-section {
+    padding: 28px;
+}
+
+
+/* ==========================
+   Mobile Adjustment
+========================== */
+
+@media (max-width: 576px) {
+
+    .dashboard {
+        gap: 20px;
+    }
+
+    .hero {
+        padding: 24px 20px;
+    }
+
+    .dashboard-card {
+        padding: 20px;
+    }
+
+    .task-section,
+    .planner-section,
+    .study-section,
+    .pomodoro-section,
+    .notes-section,
+    .goals-section,
+    .statistics-section,
+    .calendar-section {
+        padding: 20px;
+    }
+
+}
+/* ==========================
+   Phase 18
+   Part 2
+   Cards, Borders & Shadows
+========================== */
+
+
+/* ==========================
+   Common Card Styling
+========================== */
+
+.dashboard-card,
+.task-section,
+.planner-section,
+.study-section,
+.pomodoro-section,
+.notes-section,
+.goals-section,
+.statistics-section,
+.calendar-section {
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    transition:
+        transform var(--transition),
+        box-shadow var(--transition),
+        border-color var(--transition);
+}
+
+
+/* ==========================
+   Card Hover
+========================== */
+
+.dashboard-card:hover {
+    transform: translateY(-3px);
+    box-shadow:
+        0 14px 30px rgba(0, 0, 0, 0.18);
+}
+
+
+/* ==========================
+   Secondary Cards
+========================== */
+
+.dashboard-secondary > * {
+    border: 1px solid var(--border);
+}
+
+
+/* ==========================
+   Task / Planner / Study Items
+========================== */
+
+.task-item,
+.planner-item,
+.study-item {
+    border-bottom: 1px solid var(--border);
+    transition:
+        background-color var(--transition),
+        transform var(--transition);
+}
+
+.task-item:hover,
+.planner-item:hover,
+.study-item:hover {
+    background-color: var(--surface-light);
+}
+
+
+/* ==========================
+   Notes & Goals Cards
+========================== */
+
+.note-card,
+.goal-card {
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    transition:
+        transform var(--transition),
+        box-shadow var(--transition),
+        border-color var(--transition);
+}
+
+.note-card:hover,
+.goal-card:hover {
+    transform: translateY(-3px);
+}
+
+
+/* ==========================
+   Mobile
+========================== */
+
+@media (max-width: 576px) {
+
+    .dashboard-card:hover,
+    .note-card:hover,
+    .goal-card:hover {
+        transform: translateY(-1px);
+    }
+
+}
+/* ==========================
+   Phase 18
+   Part 3
+   Typography & Buttons
+========================== */
+
+
+/* ==========================
+   Typography Hierarchy
+========================== */
+
+.page-title {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.hero h1 {
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+}
+
+.task-header h2,
+.planner-header h2,
+.study-header h2,
+.pomodoro-header h2,
+.notes-header h2,
+.goals-header h2,
+.statistics-header h2,
+.calendar-header h2 {
+    font-weight: 650;
+    letter-spacing: -0.02em;
+}
+
+.hero-description,
+.section-description,
+.card-description {
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
+
+/* ==========================
+   Buttons
+========================== */
+
+button {
+    font-family: inherit;
+}
+
+.add-task-button,
+.planner-add-button,
+.study-add-button,
+.notes-add-button,
+.goals-add-button {
+    min-height: 42px;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-weight: 600;
+    transition:
+        transform var(--transition),
+        background-color var(--transition),
+        box-shadow var(--transition);
+}
+
+.add-task-button:hover,
+.planner-add-button:hover,
+.study-add-button:hover,
+.notes-add-button:hover,
+.goals-add-button:hover {
+    transform: translateY(-1px);
+}
+
+.add-task-button:active,
+.planner-add-button:active,
+.study-add-button:active,
+.notes-add-button:active,
+.goals-add-button:active {
+    transform: translateY(0);
+}
+
+
+/* ==========================
+   Form Buttons
+========================== */
+
+.planner-form-actions button,
+.study-form-actions button,
+.notes-form-actions button,
+.goals-form-actions button {
+    min-height: 40px;
+    padding: 9px 16px;
+    border-radius: 9px;
+    font-weight: 600;
+}
+
+
+/* ==========================
+   Focus Accessibility
+========================== */
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+/* ==========================
+   Phase 18
+   Part 4
+   Interactive States
+========================== */
+
+
+/* ==========================
+   Navigation
+========================== */
+
+.nav-item {
+    transition:
+        background-color var(--transition),
+        color var(--transition),
+        transform var(--transition);
+}
+
+.nav-item:hover {
+    transform: translateX(2px);
+}
+
+.nav-item.active {
+    font-weight: 600;
+}
+
+
+/* ==========================
+   Icon Buttons
+========================== */
+
+.task-actions button,
+.planner-item-actions button,
+.study-item-actions button,
+.notes-card-actions button,
+.goals-card-actions button {
+    transition:
+        transform var(--transition),
+        color var(--transition),
+        background-color var(--transition);
+}
+
+.task-actions button:hover,
+.planner-item-actions button:hover,
+.study-item-actions button:hover,
+.notes-card-actions button:hover,
+.goals-card-actions button:hover {
+    transform: scale(1.06);
+}
+
+
+/* ==========================
+   Inputs
+========================== */
+
+input,
+select,
+textarea {
+    transition:
+        border-color var(--transition),
+        box-shadow var(--transition),
+        background-color var(--transition);
+}
+
+input:hover,
+select:hover,
+textarea:hover {
+    border-color: var(--primary);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+}
+
+
+/* ==========================
+   Checkbox
+========================== */
+
+.task-checkbox {
+    transition:
+        transform var(--transition),
+        background-color var(--transition);
+}
+
+.task-checkbox:hover {
+    transform: scale(1.08);
+}
+
+
+/* ==========================
+   Theme Toggle
+========================== */
+
+.theme-toggle {
+    transition:
+        transform var(--transition),
+        background-color var(--transition),
+        color var(--transition);
+}
+
+.theme-toggle:hover {
+    transform: rotate(12deg);
+}
+
+
+/* ==========================
+   Avatar
+========================== */
+
+.avatar {
+    transition:
+        transform var(--transition),
+        box-shadow var(--transition);
+}
+
+.avatar:hover {
+    transform: scale(1.04);
+}
+
+
+/* ==========================
+   Reduced Motion
+========================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+
+}
+/* ==========================
+   Phase 18
+   Part 5
+   Theme Consistency
+========================== */
+
+
+/* ==========================
+   Surface Consistency
+========================== */
+
+.dashboard-card,
+.task-section,
+.planner-section,
+.study-section,
+.pomodoro-section,
+.notes-section,
+.goals-section,
+.statistics-section,
+.calendar-section,
+.note-card,
+.goal-card {
+    background-color: var(--surface);
+    color: var(--text);
+}
+
+
+/* ==========================
+   Secondary Surfaces
+========================== */
+
+.task-item,
+.planner-item,
+.study-item {
+    background-color: transparent;
+    color: var(--text);
+}
+
+
+/* ==========================
+   Borders
+========================== */
+
+.dashboard-card,
+.task-section,
+.planner-section,
+.study-section,
+.pomodoro-section,
+.notes-section,
+.goals-section,
+.statistics-section,
+.calendar-section,
+.note-card,
+.goal-card,
+.task-item,
+.planner-item,
+.study-item {
+    border-color: var(--border);
+}
+
+
+/* ==========================
+   Muted Text
+========================== */
+
+.hero-description,
+.section-description,
+.card-description,
+.task-count {
+    color: var(--text-light);
+}
+
+
+/* ==========================
+   Inputs
+========================== */
+
+input,
+select,
+textarea {
+    background-color: var(--surface);
+    color: var(--text);
+    border-color: var(--border);
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: var(--text-light);
+}
+
+
+/* ==========================
+   Hover Surface
+========================== */
+
+.task-item:hover,
+.planner-item:hover,
+.study-item:hover {
+    background-color: var(--surface-light);
+}
+
+
+/* ==========================
+   Theme Toggle
+========================== */
+
+body.light-theme .theme-toggle {
+    color: var(--text);
+    background-color: var(--surface-light);
+}
+
+
+/* ==========================
+   Modal Surface
+========================== */
+
+.planner-modal-content,
+.study-modal-content,
+.notes-modal-content,
+.goals-modal-content {
+    background-color: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+/* ==========================
+   Phase 18
+   Part 6
+   Final Visual Refinement
+========================== */
+
+
+/* ==========================
+   Consistent Radius
+========================== */
+
+.dashboard-card,
+.task-section,
+.planner-section,
+.study-section,
+.pomodoro-section,
+.notes-section,
+.goals-section,
+.statistics-section,
+.calendar-section,
+.note-card,
+.goal-card {
+    border-radius: var(--border-radius);
+}
+
+
+/* ==========================
+   Card Content Spacing
+========================== */
+
+.dashboard-card h3,
+.dashboard-card h4 {
+    margin-bottom: 8px;
+}
+
+.task-section h2,
+.planner-section h2,
+.study-section h2,
+.pomodoro-section h2,
+.notes-section h2,
+.goals-section h2,
+.statistics-section h2,
+.calendar-section h2 {
+    line-height: 1.3;
+}
+
+
+/* ==========================
+   Consistent Interactive Radius
+========================== */
+
+button,
+input,
+select,
+textarea {
+    border-radius: 10px;
+}
+
+
+/* ==========================
+   Smooth Surface Transition
+========================== */
+
+.dashboard-card,
+.task-section,
+.planner-section,
+.study-section,
+.pomodoro-section,
+.notes-section,
+.goals-section,
+.statistics-section,
+.calendar-section,
+.note-card,
+.goal-card,
+input,
+select,
+textarea {
+    transition:
+        background-color var(--transition),
+        border-color var(--transition),
+        box-shadow var(--transition);
+}
+
+
+/* ==========================
+   Section Separation
+========================== */
+
+.task-section,
+.planner-section,
+.study-section,
+.pomodoro-section,
+.notes-section,
+.goals-section,
+.statistics-section,
+.calendar-section {
+    overflow: hidden;
+}
+
+
+/* ==========================
+   Mobile Refinement
+========================== */
+
+@media (max-width: 576px) {
+
+    .dashboard-card,
+    .task-section,
+    .planner-section,
+    .study-section,
+    .pomodoro-section,
+    .notes-section,
+    .goals-section,
+    .statistics-section,
+    .calendar-section {
+        border-radius: 12px;
+    }
+
+}
