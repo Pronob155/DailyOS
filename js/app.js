@@ -244,32 +244,118 @@ function updateTaskUI(task) {
 
 function initializeTaskEvents() {
 
-    const taskCheckboxes = document.querySelectorAll(
-        ".task-checkbox"
-    );
+    /* ==========================
+       Add New Task
+    ========================== */
 
-    taskCheckboxes.forEach(checkbox => {
+    const addTaskButton =
+        document.querySelector(".add-task-button");
 
-        checkbox.addEventListener("click", () => {
+    const taskInput =
+        document.querySelector(".task-input-wrapper input");
 
-            const taskElement =
-                checkbox.closest(".task-item");
 
-            if (!taskElement) {
-                return;
+    if (addTaskButton && taskInput) {
+
+        addTaskButton.addEventListener(
+            "click",
+            () => {
+
+                const title =
+                    taskInput.value.trim();
+
+
+                if (!title) {
+
+                    taskInput.focus();
+
+                    return;
+                }
+
+
+                const tasks =
+                    loadTasks();
+
+
+                const newTask = {
+
+                    id: Date.now(),
+
+                    title: title,
+
+                    time: "Today",
+
+                    priority: "medium",
+
+                    completed: false
+
+                };
+
+
+                tasks.push(newTask);
+
+
+                saveTasks(tasks);
+
+
+                taskInput.value = "";
+
+
+                /*
+                 * Refresh task list
+                 */
+                renderTasks();
+
+
+                /*
+                 * Re-apply search/filter
+                 */
+                applyTaskFilters();
+
+
+                /*
+                 * Update dashboard count
+                 */
+                updateDashboardStats();
+
+
+                console.log(
+                    "New task added:",
+                    newTask
+                );
+
             }
+        );
 
-            const taskId = Number(
-                taskElement.dataset.taskId
-            );
 
-            toggleTaskCompletion(taskId);
+        /*
+         * Add task with Enter key
+         */
+        taskInput.addEventListener(
+            "keydown",
+            event => {
 
-        });
+                if (event.key === "Enter") {
 
-    });
+                    addTaskButton.click();
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* ==========================
+       Search Tasks
+    ========================== */
+
     const searchInput =
-        document.getElementById("task-search");
+        document.getElementById(
+            "task-search"
+        );
+
 
     if (searchInput) {
 
@@ -283,8 +369,17 @@ function initializeTaskEvents() {
         );
 
     }
+
+
+    /* ==========================
+       Filter Tasks
+    ========================== */
+
     const taskFilter =
-        document.getElementById("task-filter");
+        document.getElementById(
+            "task-filter"
+        );
+
 
     if (taskFilter) {
 
@@ -298,6 +393,7 @@ function initializeTaskEvents() {
         );
 
     }
+
 }
 /* ==========================
    Planner Local Storage
@@ -1124,6 +1220,103 @@ function escapeHTML(value) {
 
     return div.innerHTML;
 
+}
+function renderTasks() {
+    const taskList = document.querySelector(".task-list");
+
+    if (!taskList) return;
+
+    const tasks = loadTasks();
+
+    // Remove existing task items
+    taskList.querySelectorAll(".task-item").forEach(taskItem => {
+        taskItem.remove();
+    });
+
+    tasks.forEach(task => {
+        const taskElement = document.createElement("article");
+
+        taskElement.className = "task-item";
+
+        if (task.completed) {
+            taskElement.classList.add("completed");
+        }
+
+        taskElement.dataset.taskId = task.id;
+
+        taskElement.innerHTML = `
+            <div class="task-main">
+
+                <button
+                    class="task-checkbox ${task.completed ? "checked" : ""}"
+                    type="button"
+                    aria-label="${task.completed ? "Completed task" : "Complete task"}"
+                >
+                    <i class="fa-solid fa-check"></i>
+                </button>
+
+                <div class="task-info">
+
+                    <h3 class="task-title">
+                        ${escapeHTML(task.title)}
+                    </h3>
+
+                    <p>
+                        <i class="fa-regular fa-clock"></i>
+                        Today · ${task.time}
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="task-actions">
+
+                <span class="priority ${task.priority}">
+                    ${task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}
+                </span>
+
+                <button
+                    class="task-menu"
+                    type="button"
+                    aria-label="Task options"
+                >
+                    <i class="fa-solid fa-ellipsis"></i>
+                </button>
+
+            </div>
+        `;
+
+        taskList.insertBefore(
+            taskElement,
+            document.getElementById("task-empty-state")
+        );
+    });
+
+    // Reconnect checkbox events
+    initializeTaskCheckboxes();
+}
+function initializeTaskCheckboxes() {
+    const taskCheckboxes =
+        document.querySelectorAll(".task-checkbox");
+
+    taskCheckboxes.forEach(checkbox => {
+
+        checkbox.addEventListener("click", () => {
+
+            const taskElement =
+                checkbox.closest(".task-item");
+
+            if (!taskElement) return;
+
+            const taskId =
+                Number(taskElement.dataset.taskId);
+
+            toggleTaskCompletion(taskId);
+
+            applyTaskFilters();
+        });
+    });
 }
 /* ==========================
    Sync Task UI
@@ -3931,8 +4124,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     initializeTheme();
     initializeApp();
+    renderTasks();
     initializeTaskEvents();
-    syncTaskUI();
     updateDashboardStats();
     initializePlanner();
     initializeStudyTracker();
