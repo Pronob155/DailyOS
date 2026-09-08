@@ -4232,4 +4232,21 @@ function initializeProductivityStatistics() {
 
     updateProductivityStatistics();
 }
+document.addEventListener("DOMContentLoaded", () => {
 
+    console.log("DailyOS Initialized.");
+
+    initializeTheme();
+    initializeApp();
+    renderTasks();
+    initializeTaskEvents();
+    updateDashboardStats();
+    initializePlanner();
+    initializeStudyTracker();
+    initializePomodoro();
+    initializeNotes();
+    initializeGoals();
+    initializeProductivityStatistics();
+    initializeCalendar();
+
+});
