@@ -393,6 +393,118 @@ function initializeTaskEvents() {
         );
 
     }
+    /* ==========================
+ Task Menu / Edit / Delete
+========================== */
+
+    const taskList =
+        document.querySelector(".task-list");
+
+    if (taskList) {
+
+        taskList.addEventListener(
+            "click",
+            event => {
+
+                const menuButton =
+                    event.target.closest(
+                        '[data-action="task-menu"]'
+                    );
+
+                if (!menuButton) {
+                    return;
+                }
+
+                const taskId =
+                    Number(menuButton.dataset.taskId);
+
+                const tasks =
+                    loadTasks();
+
+                const task =
+                    tasks.find(
+                        item =>
+                            item.id === taskId
+                    );
+
+                if (!task) {
+                    return;
+                }
+
+                const action =
+                    prompt(
+                        "Type 'edit' to edit or 'delete' to delete:",
+                        "edit"
+                    );
+
+                if (action === null) {
+                    return;
+                }
+
+                /* ==========================
+                   Edit Task
+                ========================== */
+
+                if (action.toLowerCase() === "edit") {
+
+                    const newTitle =
+                        prompt(
+                            "Edit task:",
+                            task.title
+                        );
+
+                    if (newTitle === null) {
+                        return;
+                    }
+
+                    const title =
+                        newTitle.trim();
+
+                    if (!title) {
+                        return;
+                    }
+
+                    task.title = title;
+
+                    saveTasks(tasks);
+
+                    renderTasks();
+                    applyTaskFilters();
+                    updateDashboardStats();
+
+                    return;
+                }
+
+                /* ==========================
+                   Delete Task
+                ========================== */
+
+                if (action.toLowerCase() === "delete") {
+
+                    const confirmed =
+                        confirm(
+                            `Delete "${task.title}"?`
+                        );
+
+                    if (!confirmed) {
+                        return;
+                    }
+
+                    const updatedTasks =
+                        tasks.filter(
+                            item =>
+                                item.id !== taskId
+                        );
+
+                    saveTasks(updatedTasks);
+
+                    renderTasks();
+                    applyTaskFilters();
+                    updateDashboardStats();
+                }
+            }
+        );
+    }
 
 }
 /* ==========================
@@ -1277,12 +1389,14 @@ function renderTasks() {
                 </span>
 
                 <button
-                    class="task-menu"
-                    type="button"
-                    aria-label="Task options"
-                >
-                    <i class="fa-solid fa-ellipsis"></i>
-                </button>
+    class="task-menu"
+    type="button"
+    data-action="task-menu"
+    data-task-id="${task.id}"
+    aria-label="Task options"
+>
+    <i class="fa-solid fa-ellipsis"></i>
+</button>
 
             </div>
         `;
@@ -4118,21 +4232,4 @@ function initializeProductivityStatistics() {
 
     updateProductivityStatistics();
 }
-document.addEventListener("DOMContentLoaded", () => {
 
-    console.log("DailyOS Initialized.");
-
-    initializeTheme();
-    initializeApp();
-    renderTasks();
-    initializeTaskEvents();
-    updateDashboardStats();
-    initializePlanner();
-    initializeStudyTracker();
-    initializePomodoro();
-    initializeNotes();
-    initializeGoals();
-    initializeProductivityStatistics();
-    initializeCalendar();
-
-});
