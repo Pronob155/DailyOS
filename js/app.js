@@ -4202,8 +4202,6 @@ function renderGoalStatisticsChart() {
             }
         );
 }
-
-
 /**
  * Updates all productivity statistics.
  */
@@ -4223,8 +4221,6 @@ function updateProductivityStatistics() {
 
     renderGoalStatisticsChart();
 }
-
-
 /**
  * Initializes productivity statistics.
  */
@@ -4232,21 +4228,4 @@ function initializeProductivityStatistics() {
 
     updateProductivityStatistics();
 }
-document.addEventListener("DOMContentLoaded", () => {
 
-    console.log("DailyOS Initialized.");
-
-    initializeTheme();
-    initializeApp();
-    renderTasks();
-    initializeTaskEvents();
-    updateDashboardStats();
-    initializePlanner();
-    initializeStudyTracker();
-    initializePomodoro();
-    initializeNotes();
-    initializeGoals();
-    initializeProductivityStatistics();
-    initializeCalendar();
-
-});
