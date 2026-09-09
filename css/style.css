@@ -806,7 +806,7 @@ body,
 }
 
 .planner-modal-close:hover {
-    background: var(--background);
+    background: var(--surface-light);
     color: var(--text);
 }
 
@@ -4085,13 +4085,11 @@ body.light-theme {
    Section Headers
 ========================== */
 
-.task-header,
+.section-header,
 .planner-header,
 .study-header,
-.pomodoro-header,
 .notes-header,
 .goals-header,
-.statistics-header,
 .calendar-header {
     margin-bottom: 24px;
 }
