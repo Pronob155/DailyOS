@@ -4001,15 +4001,66 @@ body.light-theme {
 ========================== */
 
 .dashboard-cards {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
     gap: 20px;
 }
 
 .dashboard-secondary {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
     gap: 20px;
 }
 
+
+/* ==========================
+   Dashboard Card
+========================== */
+
 .dashboard-card {
+    min-width: 0;
+
+    background: var(--surface);
+
+    border-radius: var(--border-radius);
+
     padding: 24px;
+
+    border: 1px solid var(--border);
+
+    box-shadow: var(--shadow);
+}
+
+.card-header {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 14px;
+}
+
+.card-header i {
+    color: var(--primary);
+}
+
+.card-value {
+    font-size: 1.5rem;
+
+    font-weight: 700;
+}
+
+.card-description {
+    color: var(--text-light);
+
+    font-size: 0.85rem;
 }
 
 
