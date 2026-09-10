@@ -903,41 +903,91 @@ body,
    Planner Actions
 ========================== */
 
-.planner-actions {
-    display: flex;
-    gap: 8px;
-    margin-top: 12px;
+.planner-content {
+    position: relative;
+    padding-right: 90px;
 }
 
+.planner-actions {
+    position: absolute;
+
+    top: 0;
+    right: 0;
+
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    margin: 0;
+}
+
+
+/* ==========================
+   Planner Action Button
+========================== */
+
 .planner-actions button {
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
 
     display: inline-flex;
     align-items: center;
     justify-content: center;
 
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
 
-    background: transparent;
+    background: var(--surface);
     color: var(--text-light);
+
+    font-size: 0.78rem;
 
     cursor: pointer;
 
     transition:
-        background 0.2s ease,
-        color 0.2s ease;
+        background-color var(--transition),
+        border-color var(--transition),
+        color var(--transition),
+        transform var(--transition);
 }
+
+
+/* ==========================
+   Edit
+========================== */
 
 .planner-edit-button:hover {
-    background: var(--background);
-    color: var(--text);
+    background: rgba(99, 102, 241, 0.12);
+
+    border-color: rgba(99, 102, 241, 0.35);
+
+    color: var(--primary);
+
+    transform: translateY(-1px);
 }
 
+
+/* ==========================
+   Delete
+========================== */
+
 .planner-delete-button:hover {
-    background: var(--background);
-    color: #ef4444;
+    background: rgba(239, 68, 68, 0.12);
+
+    border-color: rgba(239, 68, 68, 0.3);
+
+    color: var(--danger);
+
+    transform: translateY(-1px);
+}
+
+
+/* ==========================
+   Active
+========================== */
+
+.planner-actions button:active {
+    transform: translateY(0);
 }
 /* ==========================
    Calendar
