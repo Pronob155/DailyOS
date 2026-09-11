@@ -252,7 +252,9 @@ function initializeTaskEvents() {
         document.querySelector(".add-task-button");
 
     const taskInput =
-        document.querySelector(".task-input-wrapper input");
+        document.querySelector(
+            ".task-input-wrapper input"
+        );
 
 
     if (addTaskButton && taskInput) {
@@ -294,43 +296,25 @@ function initializeTaskEvents() {
 
                 tasks.push(newTask);
 
-
                 saveTasks(tasks);
-
 
                 taskInput.value = "";
 
 
-                /*
-                 * Refresh task list
-                 */
                 renderTasks();
 
-
-                /*
-                 * Re-apply search/filter
-                 */
                 applyTaskFilters();
 
-
-                /*
-                 * Update dashboard count
-                 */
                 updateDashboardStats();
 
-
-                console.log(
-                    "New task added:",
-                    newTask
-                );
+                updateProductivityStatistics();
 
             }
         );
 
 
-        /*
-         * Add task with Enter key
-         */
+        /* Enter key */
+
         taskInput.addEventListener(
             "keydown",
             event => {
@@ -393,12 +377,15 @@ function initializeTaskEvents() {
         );
 
     }
+
+
     /* ==========================
- Task Menu / Edit / Delete
-========================== */
+       Task Actions
+    ========================== */
 
     const taskList =
         document.querySelector(".task-list");
+
 
     if (taskList) {
 
@@ -406,107 +393,717 @@ function initializeTaskEvents() {
             "click",
             event => {
 
+                /* ==========================
+                   Task Menu
+                ========================== */
+
                 const menuButton =
                     event.target.closest(
                         '[data-action="task-menu"]'
                     );
 
-                if (!menuButton) {
-                    return;
-                }
 
-                const taskId =
-                    Number(menuButton.dataset.taskId);
+                if (menuButton) {
 
-                const tasks =
-                    loadTasks();
+                    event.stopPropagation();
 
-                const task =
-                    tasks.find(
-                        item =>
-                            item.id === taskId
+
+                    const wrapper =
+                        menuButton.closest(
+                            ".task-menu-wrapper"
+                        );
+
+
+                    if (!wrapper) {
+                        return;
+                    }
+
+
+                    document
+                        .querySelectorAll(
+                            ".task-menu-wrapper.active"
+                        )
+                        .forEach(item => {
+
+                            if (item !== wrapper) {
+
+                                item.classList.remove(
+                                    "active"
+                                );
+
+                            }
+
+                        });
+
+
+                    wrapper.classList.toggle(
+                        "active"
                     );
 
-                if (!task) {
+
                     return;
                 }
 
-                const action =
-                    prompt(
-                        "Type 'edit' to edit or 'delete' to delete:",
-                        "edit"
-                    );
-
-                if (action === null) {
-                    return;
-                }
 
                 /* ==========================
                    Edit Task
                 ========================== */
 
-                if (action.toLowerCase() === "edit") {
+                const editButton =
+                    event.target.closest(
+                        '[data-action="edit-task"]'
+                    );
 
-                    const newTitle =
-                        prompt(
-                            "Edit task:",
-                            task.title
+
+                if (editButton) {
+
+                    const taskId =
+                        Number(
+                            editButton.dataset.taskId
                         );
 
-                    if (newTitle === null) {
-                        return;
-                    }
 
-                    const title =
-                        newTitle.trim();
+                    closeTaskMenus();
 
-                    if (!title) {
-                        return;
-                    }
-
-                    task.title = title;
-
-                    saveTasks(tasks);
-
-                    renderTasks();
-                    applyTaskFilters();
-                    updateDashboardStats();
+                    openEditTaskModal(taskId);
 
                     return;
                 }
+
 
                 /* ==========================
                    Delete Task
                 ========================== */
 
-                if (action.toLowerCase() === "delete") {
+                const deleteButton =
+                    event.target.closest(
+                        '[data-action="delete-task"]'
+                    );
 
-                    const confirmed =
-                        confirm(
-                            `Delete "${task.title}"?`
+
+                if (deleteButton) {
+
+                    const taskId =
+                        Number(
+                            deleteButton.dataset.taskId
                         );
 
-                    if (!confirmed) {
-                        return;
-                    }
 
-                    const updatedTasks =
-                        tasks.filter(
-                            item =>
-                                item.id !== taskId
-                        );
+                    closeTaskMenus();
 
-                    saveTasks(updatedTasks);
+                    openDeleteTaskModal(taskId);
 
-                    renderTasks();
-                    applyTaskFilters();
-                    updateDashboardStats();
+                    return;
                 }
+
             }
         );
+
     }
 
+
+    /* ==========================
+       Close Menu Outside
+    ========================== */
+
+    document.addEventListener(
+        "click",
+        event => {
+
+            if (
+                !event.target.closest(
+                    ".task-menu-wrapper"
+                )
+            ) {
+
+                closeTaskMenus();
+
+            }
+
+        }
+    );
+
 }
+
+
+/* ==========================
+   Close Task Menus
+========================== */
+
+function closeTaskMenus() {
+
+    document
+        .querySelectorAll(
+            ".task-menu-wrapper.active"
+        )
+        .forEach(menu => {
+
+            menu.classList.remove(
+                "active"
+            );
+
+        });
+
+}
+
+
+/* ==========================
+   Create Task Modals
+========================== */
+
+function createTaskModals() {
+
+    if (
+        document.getElementById(
+            "task-edit-modal"
+        )
+    ) {
+
+        return;
+    }
+
+
+    const modalHTML = `
+
+        <!-- Edit Task Modal -->
+
+        <div
+            class="task-modal"
+            id="task-edit-modal"
+            hidden
+        >
+
+            <div
+                class="task-modal-overlay"
+                data-task-modal-close
+            ></div>
+
+
+            <div
+                class="task-modal-content"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="task-edit-title"
+            >
+
+                <div class="task-modal-header">
+
+                    <div>
+
+                        <span class="task-modal-label">
+                            TASK
+                        </span>
+
+                        <h2 id="task-edit-title">
+                            Edit Task
+                        </h2>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="task-modal-close"
+                        data-task-modal-close
+                        aria-label="Close"
+                    >
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+
+                </div>
+
+
+                <form id="task-edit-form">
+
+                    <div class="task-modal-field">
+
+                        <label for="task-edit-input">
+                            Task title
+                        </label>
+
+                        <input
+                            type="text"
+                            id="task-edit-input"
+                            placeholder="Enter task title"
+                            autocomplete="off"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="task-modal-actions">
+
+                        <button
+                            type="button"
+                            class="task-modal-cancel"
+                            data-task-modal-close
+                        >
+                            Cancel
+                        </button>
+
+
+                        <button
+                            type="submit"
+                            class="task-modal-save"
+                        >
+                            <i class="fa-solid fa-check"></i>
+                            Save Changes
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+        <!-- Delete Task Modal -->
+
+        <div
+            class="task-modal"
+            id="task-delete-modal"
+            hidden
+        >
+
+            <div
+                class="task-modal-overlay"
+                data-task-modal-close
+            ></div>
+
+
+            <div
+                class="task-modal-content task-delete-content"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="task-delete-title"
+            >
+
+                <div class="task-modal-header">
+
+                    <div>
+
+                        <span class="task-modal-label">
+                            TASK
+                        </span>
+
+                        <h2 id="task-delete-title">
+                            Delete Task
+                        </h2>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="task-modal-close"
+                        data-task-modal-close
+                        aria-label="Close"
+                    >
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+
+                </div>
+
+
+                <div class="task-delete-body">
+
+                    <div class="task-delete-icon">
+
+                        <i class="fa-solid fa-trash"></i>
+
+                    </div>
+
+
+                    <p>
+                        Are you sure you want to delete this task?
+                    </p>
+
+
+                    <strong
+                        id="task-delete-name"
+                    ></strong>
+
+                </div>
+
+
+                <div class="task-modal-actions">
+
+                    <button
+                        type="button"
+                        class="task-modal-cancel"
+                        data-task-modal-close
+                    >
+                        Cancel
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="task-modal-delete"
+                        id="task-delete-confirm"
+                    >
+                        <i class="fa-solid fa-trash"></i>
+                        Delete Task
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    document.body.insertAdjacentHTML(
+        "beforeend",
+        modalHTML
+    );
+
+
+    initializeTaskModalEvents();
+
+}
+
+
+/* ==========================
+   Task Modal Events
+========================== */
+
+function initializeTaskModalEvents() {
+
+    const editModal =
+        document.getElementById(
+            "task-edit-modal"
+        );
+
+    const deleteModal =
+        document.getElementById(
+            "task-delete-modal"
+        );
+
+    const editForm =
+        document.getElementById(
+            "task-edit-form"
+        );
+
+    const editInput =
+        document.getElementById(
+            "task-edit-input"
+        );
+
+    const deleteConfirm =
+        document.getElementById(
+            "task-delete-confirm"
+        );
+
+    let editingTaskId = null;
+
+    let deletingTaskId = null;
+
+
+    /* ==========================
+       Close Modal
+    ========================== */
+
+    function closeTaskModals() {
+
+        if (editModal) {
+
+            editModal.hidden = true;
+
+        }
+
+
+        if (deleteModal) {
+
+            deleteModal.hidden = true;
+
+        }
+
+
+        editingTaskId = null;
+
+        deletingTaskId = null;
+
+    }
+
+
+    /* ==========================
+       Close Buttons / Overlay
+    ========================== */
+
+    document
+        .querySelectorAll(
+            "[data-task-modal-close]"
+        )
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                closeTaskModals
+            );
+
+        });
+
+
+    /* ==========================
+       Edit Submit
+    ========================== */
+
+    editForm?.addEventListener(
+        "submit",
+        event => {
+
+            event.preventDefault();
+
+
+            if (
+                editingTaskId === null
+            ) {
+                return;
+            }
+
+
+            const newTitle =
+                editInput.value.trim();
+
+
+            if (!newTitle) {
+
+                editInput.focus();
+
+                return;
+            }
+
+
+            const tasks =
+                loadTasks();
+
+
+            const task =
+                tasks.find(
+                    item =>
+                        Number(item.id) ===
+                        Number(editingTaskId)
+                );
+
+
+            if (!task) {
+
+                closeTaskModals();
+
+                return;
+            }
+
+
+            task.title =
+                newTitle;
+
+
+            saveTasks(tasks);
+
+
+            closeTaskModals();
+
+
+            renderTasks();
+
+            applyTaskFilters();
+
+            updateDashboardStats();
+
+            updateProductivityStatistics();
+
+        }
+    );
+
+
+    /* ==========================
+       Delete Confirm
+    ========================== */
+
+    deleteConfirm?.addEventListener(
+        "click",
+        () => {
+
+            if (
+                deletingTaskId === null
+            ) {
+                return;
+            }
+
+
+            const tasks =
+                loadTasks();
+
+
+            const updatedTasks =
+                tasks.filter(
+                    task =>
+                        Number(task.id) !==
+                        Number(deletingTaskId)
+                );
+
+
+            saveTasks(
+                updatedTasks
+            );
+
+
+            closeTaskModals();
+
+
+            renderTasks();
+
+            applyTaskFilters();
+
+            updateDashboardStats();
+
+            updateProductivityStatistics();
+
+        }
+    );
+
+
+    /* ==========================
+       Escape Key
+    ========================== */
+
+    document.addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Escape"
+            ) {
+
+                closeTaskModals();
+
+                closeTaskMenus();
+
+            }
+
+        }
+    );
+
+
+    /* ==========================
+       Store Modal Functions
+    ========================== */
+
+    window.openEditTaskModal =
+        function(taskId) {
+
+            const tasks =
+                loadTasks();
+
+
+            const task =
+                tasks.find(
+                    item =>
+                        Number(item.id) ===
+                        Number(taskId)
+                );
+
+
+            if (!task) {
+                return;
+            }
+
+
+            editingTaskId =
+                Number(taskId);
+
+
+            if (editInput) {
+
+                editInput.value =
+                    task.title;
+
+            }
+
+
+            if (editModal) {
+
+                editModal.hidden =
+                    false;
+
+            }
+
+
+            requestAnimationFrame(
+                () => {
+
+                    editInput?.focus();
+
+                    editInput?.select();
+
+                }
+            );
+
+        };
+
+
+    window.openDeleteTaskModal =
+        function(taskId) {
+
+            const tasks =
+                loadTasks();
+
+
+            const task =
+                tasks.find(
+                    item =>
+                        Number(item.id) ===
+                        Number(taskId)
+                );
+
+
+            if (!task) {
+                return;
+            }
+
+
+            deletingTaskId =
+                Number(taskId);
+
+
+            const deleteName =
+                document.getElementById(
+                    "task-delete-name"
+                );
+
+
+            if (deleteName) {
+
+                deleteName.textContent =
+                    task.title;
+
+            }
+
+
+            if (deleteModal) {
+
+                deleteModal.hidden =
+                    false;
+
+            }
+
+        };
+
+}
+
+
+/* ==========================
+   Initialize Task Modals
+========================== */
+
+createTaskModals();
+
 /* ==========================
    Planner Local Storage
 ========================== */
@@ -1388,18 +1985,33 @@ function renderTasks() {
                     ${task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}
                 </span>
 
-                <button
-    class="task-menu"
-    type="button"
-    data-action="task-menu"
-    data-task-id="${task.id}"
-    aria-label="Task options"
->
-    <i class="fa-solid fa-ellipsis"></i>
-</button>
+                <div class="task-menu-wrapper">
 
-            </div>
-        `;
+    <button class="task-menu">
+        <i class="fa-solid fa-ellipsis"></i>
+    </button>
+
+    <div class="task-action-menu">
+
+        <button
+            class="task-action"
+            data-action="edit-task"
+        >
+            <i class="fa-solid fa-pen"></i>
+            Edit
+        </button>
+
+        <button
+            class="task-action delete-task"
+            data-action="delete-task"
+        >
+            <i class="fa-solid fa-trash"></i>
+            Delete
+        </button>
+
+    </div>
+
+</div>`;
 
         taskList.insertBefore(
             taskElement,
@@ -4202,6 +4814,8 @@ function renderGoalStatisticsChart() {
             }
         );
 }
+
+
 /**
  * Updates all productivity statistics.
  */
@@ -4221,6 +4835,8 @@ function updateProductivityStatistics() {
 
     renderGoalStatisticsChart();
 }
+
+
 /**
  * Initializes productivity statistics.
  */
@@ -4228,7 +4844,6 @@ function initializeProductivityStatistics() {
 
     updateProductivityStatistics();
 }
-
 document.addEventListener("DOMContentLoaded", () => {
 
     console.log("DailyOS Initialized.");
