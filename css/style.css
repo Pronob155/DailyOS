@@ -4792,3 +4792,550 @@ textarea {
     }
 
 }
+/* ==========================
+   Planner Actions Responsive
+========================== */
+
+@media (max-width: 576px) {
+
+    .planner-content {
+        padding-right: 0;
+    }
+
+    .planner-actions {
+        position: static;
+
+        margin-top: 12px;
+
+        justify-content: flex-start;
+    }
+
+    .planner-actions button {
+        width: 36px;
+        height: 36px;
+    }
+
+}
+/* =================================
+   Task Action Menu
+================================= */
+
+.task-menu-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+
+.task-menu {
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+
+.task-menu:hover {
+    background: var(--surface-hover);
+    color: var(--text);
+}
+
+
+.task-action-menu {
+    position: absolute;
+
+    top: calc(100% + 6px);
+    right: 0;
+
+    width: 150px;
+
+    padding: 6px;
+
+    background: var(--surface);
+    border: 1px solid var(--border);
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.18);
+
+    opacity: 0;
+    visibility: hidden;
+
+    transform:
+        translateY(-5px)
+        scale(0.98);
+
+    transform-origin: top right;
+
+    transition:
+        opacity 0.16s ease,
+        transform 0.16s ease,
+        visibility 0.16s ease;
+
+    z-index: 100;
+}
+
+
+.task-menu-wrapper.active
+.task-action-menu {
+
+    opacity: 1;
+    visibility: visible;
+
+    transform:
+        translateY(0)
+        scale(1);
+}
+
+
+.task-action {
+    width: 100%;
+
+    border: none;
+    background: transparent;
+
+    padding: 9px 10px;
+
+    border-radius: 8px;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    font-family: inherit;
+    font-size: 13px;
+
+    color: var(--text);
+
+    cursor: pointer;
+
+    text-align: left;
+
+    transition:
+        background 0.15s ease,
+        color 0.15s ease;
+}
+
+
+.task-action i {
+    width: 16px;
+    text-align: center;
+}
+
+
+.task-action:hover {
+    background: var(--surface-hover);
+}
+
+
+.delete-task {
+    color: #ef4444;
+}
+
+
+.delete-task:hover {
+    background: rgba(239, 68, 68, 0.08);
+    color: #ef4444;
+}
+
+
+/* =================================
+   Task Modal
+================================= */
+
+.task-modal-overlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.55);
+
+    backdrop-filter: blur(4px);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    z-index: 1000;
+
+    animation: taskModalFadeIn 0.18s ease;
+}
+
+
+.task-modal {
+
+    width: min(440px, 100%);
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+
+    border-radius: 18px;
+
+    padding: 24px;
+
+    box-shadow:
+        0 25px 70px rgba(0, 0, 0, 0.3);
+
+    animation: taskModalSlideIn 0.2s ease;
+}
+
+
+.task-modal-overlay.closing {
+    animation: taskModalFadeOut 0.18s ease forwards;
+}
+
+
+.task-modal-overlay.closing
+.task-modal {
+    animation: taskModalSlideOut 0.18s ease forwards;
+}
+
+
+/* Header */
+
+.task-modal-header {
+
+    display: flex;
+
+    align-items: flex-start;
+    justify-content: space-between;
+
+    margin-bottom: 24px;
+}
+
+
+.modal-label {
+
+    display: block;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    letter-spacing: 0.12em;
+
+    color: var(--primary);
+
+    margin-bottom: 5px;
+}
+
+
+.task-modal-header h3 {
+
+    margin: 0;
+
+    font-size: 20px;
+
+    color: var(--text);
+}
+
+
+.task-modal-close {
+
+    width: 34px;
+    height: 34px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background: transparent;
+
+    color: var(--text-muted);
+
+    cursor: pointer;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+
+.task-modal-close:hover {
+
+    background: var(--surface-hover);
+
+    color: var(--text);
+}
+
+
+/* Fields */
+
+.task-modal-field {
+    margin-bottom: 18px;
+}
+
+
+.task-modal-field label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    color: var(--text-secondary);
+}
+
+
+.task-modal-field input,
+.task-modal-field select {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    border: 1px solid var(--border);
+
+    border-radius: 10px;
+
+    background: var(--background);
+
+    color: var(--text);
+
+    padding: 11px 12px;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.task-modal-field input:focus,
+.task-modal-field select:focus {
+
+    border-color: var(--primary);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(99, 102, 241, 0.12);
+}
+
+
+/* Buttons */
+
+.task-modal-actions {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    margin-top: 24px;
+}
+
+
+.task-modal-cancel,
+.task-modal-save,
+.task-delete-confirm {
+
+    border: none;
+
+    border-radius: 10px;
+
+    padding: 10px 15px;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    transition:
+        transform 0.15s ease,
+        opacity 0.15s ease,
+        background 0.15s ease;
+}
+
+
+.task-modal-cancel {
+
+    background: var(--surface-hover);
+
+    color: var(--text);
+}
+
+
+.task-modal-save {
+
+    background: var(--primary);
+
+    color: white;
+}
+
+
+.task-delete-confirm {
+
+    background: #ef4444;
+
+    color: white;
+}
+
+
+.task-modal-cancel:hover,
+.task-modal-save:hover,
+.task-delete-confirm:hover {
+
+    transform: translateY(-1px);
+
+    opacity: 0.92;
+}
+
+
+/* Delete modal */
+
+.delete-modal {
+    text-align: center;
+}
+
+
+.delete-icon {
+
+    width: 48px;
+    height: 48px;
+
+    margin: 0 auto 15px;
+
+    border-radius: 14px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(239, 68, 68, 0.1);
+
+    color: #ef4444;
+
+    font-size: 18px;
+}
+
+
+.delete-modal h3 {
+
+    margin: 0 0 8px;
+
+    font-size: 20px;
+
+    color: var(--text);
+}
+
+
+.delete-modal p {
+
+    margin: 0;
+
+    color: var(--text-secondary);
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+
+.delete-modal p strong {
+    color: var(--text);
+}
+
+
+.delete-modal
+.task-modal-actions {
+    justify-content: center;
+}
+
+
+/* =================================
+   Animations
+================================= */
+
+@keyframes taskModalFadeIn {
+
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+
+}
+
+
+@keyframes taskModalFadeOut {
+
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+
+}
+
+
+@keyframes taskModalSlideIn {
+
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+}
+
+
+@keyframes taskModalSlideOut {
+
+    from {
+        opacity: 1;
+        transform: translateY(12px) scale(0.98);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(0) scale(0.98);
+    }
+
+}
